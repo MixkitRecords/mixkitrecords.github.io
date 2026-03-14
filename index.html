@@ -82,7 +82,7 @@ if (sesionActiva) {
     document.getElementById("saludoUsuario").innerText = "Hola, " + u.correo.split("@")[0];
 
     setTimeout(() => {
-        window.location.href = "Principal.html.html";  // ← Conexión correcta
+        window.location.href = "tienda.html";  // ← Conexión correcta
     }, 1800);
 }
 
@@ -114,7 +114,7 @@ function iniciarSesion() {
     if (usuario) {
         localStorage.setItem("sesionActiva", JSON.stringify({ correo }));
         alert("¡Inicio de sesión correcto!");
-        window.location.href = "Principal.html";  // ← Conexión correcta
+        window.location.href = "tienda.html";  // ← Conexión correcta
     } else {
         alert("Correo o contraseña incorrectos");
     }
