@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>MixKit Records</title>
+
+<style>
+body { margin:0; padding:0; font-family:Arial,sans-serif; background:#0a0015; color:white; min-height:100vh; }
+
+.hidden{display:none}
+
+/* LOGIN */
+
+.container { max-width:420px; width:90%; margin:80px auto; background:#1a0033; border:2px solid #ff3366; border-radius:16px; padding:40px; box-shadow:0 0 20px rgba(255,51,102,0.25); }
+
+input { width:100%; padding:14px; margin:8px 0 20px; background:#220044; border:1px solid #555; border-radius:8px; color:white; font-size:1rem; }
+
+button { cursor:pointer }
+
+.loginbtn { width:100%; padding:14px; background:#ff3366; color:white; border:none; border-radius:8px; font-weight:bold; font-size:1.1rem; }
+
+.switch { text-align:center; margin-top:25px; color:#aaa; }
+.switch a { color:#ff99cc; text-decoration:none; }
+
+/* TIENDA */
+
+#tienda{
+display:none;
+background:#000000 url("MixKitLogo.jfif") center/cover fixed no-repeat;
+min-height:100vh;
+}
+
+#tienda::before{
+content:"";
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.82);
+z-index:-1;
+}
+
+header{text-align:center;padding:50px 15px 30px;}
+
+h1{font-size:3.8rem;margin:10px 0 8px;}
+
+.subtitle{color:#ccc;font-size:1.4rem;}
+
+main{max-width:1200px;margin:auto;padding:0 15px 80px;}
+
+.welcome{
+background:rgba(12,12,12,0.75);
+border:1px solid #3a3a3a;
+border-radius:14px;
+padding:28px;
+text-align:center;
+margin:35px auto;
+max-width:720px;
+position:relative;
+}
+
+.logout-btn{
+position:absolute;
+top:18px;
+right:20px;
+background:#1c1c1c;
+color:#ddd;
+border:1px solid #444;
+padding:9px 18px;
+border-radius:6px;
+}
+
+.productos{
+display:flex;
+flex-wrap:wrap;
+gap:28px;
+justify-content:center;
+}
+
+.card{
+width:300px;
+background:rgba(10,10,10,0.92);
+border:1px solid #2e2e2e;
+border-radius:14px;
+overflow:hidden;
+}
+
+.card img{
+width:100%;
+height:220px;
+object-fit:cover;
+}
+
+.card-body{
+padding:20px;
+text-align:center;
+}
+
+.precio{
+font-size:1.6rem;
+margin:12px 0 18px;
+font-weight:bold;
+}
+
+.buybtn{
+background:white;
+color:black;
+border:none;
+padding:11px 26px;
+border-radius:50px;
+font-weight:bold;
+}
+
+#btn-carrito{
+position:fixed;
+bottom:35px;
+right:35px;
+background:white;
+color:black;
+padding:15px 28px;
+border-radius:50px;
+font-weight:bold;
+display:none;
+}
+
+#modal-carrito{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.9);
+align-items:center;
+justify-content:center;
+}
+
+/* NUEVO MODAL DE PAGO */
+
+#modal-pago{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.9);
+align-items:center;
+justify-content:center;
+}
+
+select{
+width:100%;
+padding:14px;
+margin:8px 0 20px;
+background:#220044;
+border:1px solid #555;
+border-radius:8px;
+color:white;
+}
+
+.modal-box{
+background:#080808;
+border:2px solid #3a3a3a;
+border-radius:16px;
+width:92%;
+max-width:540px;
+padding:32px;
+}
+
+.item{
+display:flex;
+align-items:center;
+gap:15px;
+background:#191919;
+padding:14px;
+margin:14px 0;
+border-radius:10px;
+}
+
+.total{
+font-size:1.5rem;
+text-align:right;
+margin:35px 0;
+}
+
+/* ANIMACIÓN PARA PROCESO DE PAGO DINÁMICO */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+
+</head>
+
+<body>
+
+<div id="loginArea">
+
+<div class="container">
+
+<h1 style="text-align:center;color:#ff3366">MixKit Records</h1>
+<p class="subtitle">Inicia sesión o regístrate</p>
+
+<div id="login">
+
+<h2 style="text-align:center">Iniciar Sesión</h2>
+
+<form onsubmit="return iniciarSesion()">
+<input type="email" id="login_correo" placeholder="Correo electrónico" required>
+<input type="password" id="login_contra" placeholder="Contraseña" required>
+<button class="loginbtn">Entrar</button>
+</form>
+
+<div class="switch">
+¿No tienes cuenta?
+<a href="#" onclick="mostrarRegistro()">Regístrate</a>
+</div>
+
+</div>
+
+<div id="registro" class="hidden">
+
+<h2 style="text-align:center">Crear Cuenta</h2>
+
+<form onsubmit="return registrar()">
+<input type="email" id="reg_correo" placeholder="Correo electrónico" required>
+<input type="password" id="reg_contra" placeholder="Contraseña (mín 6)" required>
+<button class="loginbtn">Registrarme</button>
+</form>
+
+<div class="switch">
+<a href="#" onclick="mostrarLogin()">Iniciar sesión</a>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div id="tienda">
+
+<header>
+<h1>MixKit Records</h1>
+<div class="subtitle">Instrumentos Musicales</div>
+</header>
+
+<main>
+
+<div class="welcome">
+<button class="logout-btn" onclick="cerrarSesion()">Cerrar sesión</button>
+<h2>Bienvenido <span id="usuario"></span> 🎸</h2>
+</div>
+
+<div class="productos">
+
+<div class="card">
+<img src="https://media.gettyimages.com/id/843711684/photo/electric-and-acoustic-guitar-product-shoot.jpg?s=1024x1024&w=gi&k=20&c=dOVskEzM0DRkzC4Wxe5bSYtzujNcj6Ub9x6KhcHrkQY=">
+<div class="card-body">
+<h4>Guitarra Eléctrica</h4>
+<div class="precio">RD$ 28,500</div>
+<button class="buybtn" onclick="agregar('Guitarra Eléctrica',28500,'https://media.gettyimages.com/id/843711684/photo/electric-and-acoustic-guitar-product-shoot.jpg?s=1024x1024&w=gi&k=20&c=dOVskEzM0DRkzC4Wxe5bSYtzujNcj6Ub9x6KhcHrkQY=')">Añadir al carrito</button>
+</div>
+</div>
+
+<div class="card">
+<img src="https://static.roland.com/assets/images/products/gallery/vad716-sw_front_gal.jpg">
+<div class="card-body">
+<h4>Batería Acústica</h4>
+<div class="precio">RD$ 45,000</div>
+<button class="buybtn" onclick="agregar('Batería Acústica',45000,'https://static.roland.com/assets/images/products/gallery/vad716-sw_front_gal.jpg')">Añadir al carrito</button>
+</div>
+</div>
+
+<div class="card">
+<img src="https://m.media-amazon.com/images/I/71E7OdikD1L._AC_UF894,1000_QL80_.jpg">
+<div class="card-body">
+<h4>Teclado 61 teclas</h4>
+<div class="precio">RD$ 18,900</div>
+<button class="buybtn" onclick="agregar('Teclado 61 teclas',18900,'https://m.media-amazon.com/images/I/71E7OdikD1L._AC_UF894,1000_QL80_.jpg')">Añadir al carrito</button>
+</div>
+</div>
+
+<!-- NUEVOS INSTRUMENTOS -->
+
+<div class="card">
+<img src="https://m.media-amazon.com/images/I/61K9oC9UtkL.jpg">
+<div class="card-body">
+<h4>Flauta Transversal Profesional</h4>
+<div class="precio">RD$ 32,000</div>
+<button class="buybtn" onclick="agregar('Flauta Transversal',32000,'https://m.media-amazon.com/images/I/61K9oC9UtkL.jpg')">Añadir al carrito</button>
+</div>
+</div>
+
+<div class="card">
+<img src="https://m.media-amazon.com/images/I/71hQhFJbUFL.jpg">
+<div class="card-body">
+<h4>Guitarra Acústica</h4>
+<div class="precio">RD$ 19,500</div>
+<button class="buybtn" onclick="agregar('Guitarra Acústica',19500,'https://m.media-amazon.com/images/I/71hQhFJbUFL.jpg')">Añadir al carrito</button>
+</div>
+</div>
+
+<div class="card">
+<img src="https://m.media-amazon.com/images/I/71lqTq6A8QL.jpg">
+<div class="card-body">
+<h4>Violín Profesional</h4>
+<div class="precio">RD$ 24,000</div>
+<button class="buybtn" onclick="agregar('Violín Profesional',24000,'https://m.media-amazon.com/images/I/71lqTq6A8QL.jpg')">Añadir al carrito</button>
+</div>
+</div>
+
+<div class="card">
+<img src="https://m.media-amazon.com/images/I/71z4W9WzZUL.jpg">
+<div class="card-body">
+<h4>Saxofón Alto</h4>
+<div class="precio">RD$ 52,000</div>
+<button class="buybtn" onclick="agregar('Saxofón Alto',52000,'https://m.media-amazon.com/images/I/71z4W9WzZUL.jpg')">Añadir al carrito</button>
+</div>
+</div>
+
+<div class="card">
+<img src="https://m.media-amazon.com/images/I/71pK5E5bUCL.jpg">
+<div class="card-body">
+<h4>Piano Digital</h4>
+<div class="precio">RD$ 78,000</div>
+<button class="buybtn" onclick="agregar('Piano Digital',78000,'https://m.media-amazon.com/images/I/71pK5E5bUCL.jpg')">Añadir al carrito</button>
+</div>
+</div>
+
+</div>
+
+</main>
+
+<button id="btn-carrito" onclick="mostrarCarrito()">
+🛒 Carrito (<span id="contador">0</span>)
+</button>
+
+<div id="modal-carrito">
+<div class="modal-box">
+
+<h2>Tu Carrito</h2>
+
+<div id="items"></div>
+
+<div class="total" id="total">Total RD$0</div>
+
+<button onclick="vaciar()">Vaciar carrito</button>
+<button onclick="abrirPago()">Comprar</button>
+<button onclick="cerrarCarrito()">Cerrar</button>
+
+</div>
+</div>
+
+</div>
+
+<!-- MODAL DE PAGO NUEVO -->
+
+<div id="modal-pago">
+<div class="modal-box">
+
+<h2>Finalizar Compra</h2>
+
+<select id="metodo" onchange="mostrarMetodo()">
+<option value="tarjeta">Tarjeta</option>
+<option value="paypal">PayPal</option>
+<option value="transferencia">Transferencia</option>
+</select>
+
+<div id="pago-tarjeta">
+<input placeholder="Número de tarjeta">
+<input placeholder="Nombre en tarjeta">
+<input placeholder="MM/AA">
+<input placeholder="CVV">
+</div>
+
+<div id="pago-paypal" class="hidden">
+<p>Pagar con PayPal</p>
+</div>
+
+<div id="pago-transferencia" class="hidden">
+<p>Transferir a cuenta MixKit Records</p>
+</div>
+
+<!-- PROCESO DINÁMICO DE PAGO -->
+<div id="loading-pago" class="hidden">
+<p style="text-align:center; font-size:1.3rem; color:#ff3366; margin:20px 0;">Procesando tu pago...</p>
+<div style="text-align:center; font-size:2.5rem; animation:spin 1.5s linear infinite;">🔄</div>
+</div>
+
+<button id="confirm-pago" onclick="procesarPago()" class="buybtn">Confirmar Pago</button>
+<button onclick="cerrarPago()">Cancelar</button>
+
+</div>
+</div>
+
+<script>
+
+let usuarios = JSON.parse(localStorage.getItem("usuariosMixKit")) || []
+let carrito = []
+
+function getUsuarioNombre(){
+  let sesion = JSON.parse(localStorage.getItem("sesionActiva"))
+  if(sesion && sesion.correo){
+    return sesion.correo.split("@")[0]
+  }
+  return "Usuario"
+}
+
+function mostrarLogin(){
+document.getElementById("registro").classList.add("hidden")
+document.getElementById("login").classList.remove("hidden")
+}
+
+function mostrarRegistro(){
+document.getElementById("login").classList.add("hidden")
+document.getElementById("registro").classList.remove("hidden")
+}
+
+function registrar(){
+
+let correo=document.getElementById("reg_correo").value.trim().toLowerCase()
+let contra=document.getElementById("reg_contra").value
+
+if(contra.length < 6){
+alert("La contraseña debe tener al menos 6 caracteres")
+return false
+}
+
+if(usuarios.some(u=>u.correo===correo)){
+alert("Ese correo ya está registrado")
+return false
+}
+
+usuarios.push({correo,contra})
+
+localStorage.setItem("usuariosMixKit",JSON.stringify(usuarios))
+
+alert("Cuenta creada correctamente")
+
+mostrarLogin()
+
+return false
+}
+
+function iniciarSesion(){
+
+let correo=document.getElementById("login_correo").value.trim().toLowerCase()
+let contra=document.getElementById("login_contra").value
+
+let user=usuarios.find(u=>u.correo===correo && u.contra===contra)
+
+if(!user){
+alert("Correo o contraseña incorrectos")
+return false
+}
+
+localStorage.setItem("sesionActiva",JSON.stringify(user))
+
+abrirTienda()
+
+return false
+}
+
+function abrirTienda(){
+
+let sesion=JSON.parse(localStorage.getItem("sesionActiva"))
+
+document.getElementById("loginArea").style.display="none"
+document.getElementById("tienda").style.display="block"
+
+document.getElementById("usuario").innerText=sesion.correo.split("@")[0]
+
+carrito = JSON.parse(localStorage.getItem("carrito_"+sesion.correo)) || []
+
+actualizarCarrito()
+}
+
+function cerrarSesion(){
+
+let sesion=JSON.parse(localStorage.getItem("sesionActiva"))
+
+localStorage.removeItem("sesionActiva")
+
+localStorage.removeItem("carrito_"+sesion.correo)
+
+location.reload()
+}
+
+function guardarCarrito(){
+
+let sesion=JSON.parse(localStorage.getItem("sesionActiva"))
+
+localStorage.setItem("carrito_"+sesion.correo,JSON.stringify(carrito))
+}
+
+function agregar(nombre,precio,imagen){
+carrito.push({nombre,precio,imagen})
+guardarCarrito()
+actualizarCarrito()
+}
+
+function eliminar(i){
+carrito.splice(i,1)
+guardarCarrito()
+actualizarCarrito()
+}
+
+function vaciar(){
+carrito=[]
+guardarCarrito()
+actualizarCarrito()
+}
+
+function actualizarCarrito(){
+
+const items=document.getElementById("items")
+
+items.innerHTML=""
+
+let total=0
+
+carrito.forEach((p,i)=>{
+
+total+=p.precio
+
+items.innerHTML+=`
+<div class="item">
+${p.imagen ? `<img src="${p.imagen}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;flex-shrink:0;">` : ''}
+<div style="flex:1;">
+${p.nombre}<br>
+RD$${p.precio.toLocaleString()}
+</div>
+<button onclick="eliminar(${i})" style="background:#ff3366;color:white;border:none;padding:8px 14px;border-radius:50%;font-weight:bold;">X</button>
+</div>
+`
+
+})
+
+document.getElementById("total").innerText="Total RD$"+total.toLocaleString()
+
+document.getElementById("contador").innerText=carrito.length
+
+document.getElementById("btn-carrito").style.display=carrito.length>0?"block":"none"
+
+}
+
+function mostrarCarrito(){
+  document.querySelector('#modal-carrito h2').innerText = `Tu Carrito, ${getUsuarioNombre()} 🎸`
+  document.getElementById("modal-carrito").style.display="flex"
+}
+
+function cerrarCarrito(){
+  document.querySelector('#modal-carrito h2').innerText = "Tu Carrito"
+  document.getElementById("modal-carrito").style.display="none"
+}
+
+/* FUNCIONES NUEVAS DE PAGO */
+
+function abrirPago(){
+  document.querySelector('#modal-pago h2').innerText = `Finalizar Compra, ${getUsuarioNombre()}`
+  document.getElementById("modal-pago").style.display="flex"
+}
+
+function cerrarPago(){
+  document.querySelector('#modal-pago h2').innerText = "Finalizar Compra"
+  document.getElementById("modal-pago").style.display="none"
+  document.getElementById("loading-pago").classList.add("hidden")
+}
+
+function mostrarMetodo(){
+
+let metodo=document.getElementById("metodo").value
+
+document.getElementById("pago-tarjeta").classList.add("hidden")
+document.getElementById("pago-paypal").classList.add("hidden")
+document.getElementById("pago-transferencia").classList.add("hidden")
+
+if(metodo=="tarjeta") document.getElementById("pago-tarjeta").classList.remove("hidden")
+if(metodo=="paypal") document.getElementById("pago-paypal").classList.remove("hidden")
+if(metodo=="transferencia") document.getElementById("pago-transferencia").classList.remove("hidden")
+
+}
+
+function isValidCardNumber(number) {
+  number = number.replace(/\s/g, '')
+  if (!/^\d+$/.test(number) || number.length < 13 || number.length > 19) return false
+  let sum = 0
+  let shouldDouble = false
+  for (let i = number.length - 1; i >= 0; i--) {
+    let digit = parseInt(number[i])
+    if (shouldDouble) {
+      digit *= 2
+      if (digit > 9) digit -= 9
+    }
+    sum += digit
+    shouldDouble = !shouldDouble
+  }
+  return sum % 10 === 0
+}
+
+function isValidExpiry(exp) {
+  if (!/^\d{2}\/\d{2}$/.test(exp)) return false
+  let [month, year] = exp.split('/').map(n => parseInt(n))
+  if (month < 1 || month > 12) return false
+  let now = new Date()
+  let currentYear = now.getFullYear() % 100
+  let currentMonth = now.getMonth() + 1
+  if (year < currentYear || (year === currentYear && month < currentMonth)) return false
+  return true
+}
+
+function procesarPago(){
+
+  let metodo = document.getElementById("metodo").value
+
+  if(metodo === "tarjeta"){
+    const inputs = document.querySelectorAll("#pago-tarjeta input")
+    const numeroTarjeta = inputs[0].value.trim().replace(/\s/g, '')
+    const nombreTarjeta = inputs[1].value.trim()
+    const expiracion = inputs[2].value.trim()
+    const cvv = inputs[3].value.trim()
+
+    if(!numeroTarjeta || !nombreTarjeta || !expiracion || !cvv){
+      alert("Por favor completa todos los campos de la tarjeta.")
+      return
+    }
+
+    if(!isValidCardNumber(numeroTarjeta)){
+      alert("Número de tarjeta inválido. Verifica los datos.")
+      return
+    }
+
+    if(!isValidExpiry(expiracion)){
+      alert("Fecha de expiración inválida.")
+      return
+    }
+
+    if(!/^\d{3,4}$/.test(cvv)){
+      alert("CVV inválido.")
+      return
+    }
+
+    if(nombreTarjeta.length < 3){
+      alert("Nombre en tarjeta inválido.")
+      return
+    }
+  }
+
+  // PROCESO DINÁMICO
+  const loading = document.getElementById("loading-pago")
+  const confirmBtn = document.getElementById("confirm-pago")
+  
+  loading.classList.remove("hidden")
+  confirmBtn.disabled = true
+  confirmBtn.innerText = "Procesando..."
+
+  setTimeout(() => {
+    loading.classList.add("hidden")
+    confirmBtn.disabled = false
+    confirmBtn.innerText = "Confirmar Pago"
+
+    alert("Pago procesado correctamente ✅")
+
+    carrito=[]
+    guardarCarrito()
+    actualizarCarrito()
+    cerrarPago()
+    cerrarCarrito()
+  }, 1800)
+}
+
+if(localStorage.getItem("sesionActiva")){
+abrirTienda()
+}
+
+</script>
+
+</body>
+</html>
