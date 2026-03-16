@@ -13,46 +13,43 @@
             --text: #fff;
             --accent: #ffcc00;
         }
-
-        body { 
-            margin:0; padding:0; font-family:Arial,sans-serif; 
-            background:var(--bg); color:var(--text); min-height:100vh; 
+        body {
+            margin:0; padding:0; font-family:Arial,sans-serif;
+            background:var(--bg); color:var(--text); min-height:100vh;
         }
         .hidden { display:none; }
-
         /* ====================== LOGIN (semana 1) ====================== */
-        .container { 
-            max-width:420px; width:90%; margin:80px auto; 
-            background:var(--dark); border:2px solid var(--primary); 
-            border-radius:16px; padding:40px; 
-            box-shadow:0 0 20px rgba(255,51,102,0.25); 
+        .container {
+            max-width:420px; width:90%; margin:80px auto;
+            background:var(--dark); border:2px solid var(--primary);
+            border-radius:16px; padding:40px;
+            box-shadow:0 0 20px rgba(255,51,102,0.25);
         }
-        input, select { 
-            width:100%; padding:14px; margin:8px 0 20px; 
-            background:#220044; border:1px solid #555; 
-            border-radius:8px; color:var(--text); font-size:1rem; 
+        input, select {
+            width:100%; padding:14px; margin:8px 0 20px;
+            background:#220044; border:1px solid #555;
+            border-radius:8px; color:var(--text); font-size:1rem;
         }
         button { cursor:pointer; }
-        .loginbtn { 
-            width:100%; padding:14px; background:var(--primary); 
-            color:white; border:none; border-radius:8px; 
-            font-weight:bold; font-size:1.1rem; 
+        .loginbtn {
+            width:100%; padding:14px; background:var(--primary);
+            color:white; border:none; border-radius:8px;
+            font-weight:bold; font-size:1.1rem;
         }
-
-        /* ====================== TIENDA  ====================== */
+        /* ====================== TIENDA ====================== */
         #tienda {
             display:none;
             background: transparent;
             min-height:100vh;
             position:relative;
         }
-        /* Logo de fondo */
+        /* Logo de fondo - CAMBIADO A .jpg para que funcione en GitHub Pages */
         #tienda::after {
             content:"";
             position:fixed;
             inset:0;
             background: url("MixKitLogo.jpg") center/cover fixed no-repeat;
-            filter: blur(14px);          
+            filter: blur(14px);
             opacity: 0.65;
             z-index:-2;
         }
@@ -64,9 +61,8 @@
             background:rgba(0,0,0,0.82);
             z-index:-1;
         }
-
         header {
-            text-align:center; 
+            text-align:center;
             padding:40px 20px 25px;
             display:flex;
             align-items:center;
@@ -90,18 +86,17 @@
             flex-direction:column;
             align-items:center;
         }
-        h1 { 
-            font-size:3.4rem; 
-            margin:0; 
+        h1 {
+            font-size:3.4rem;
+            margin:0;
             color:var(--primary);
             text-shadow:0 0 10px rgba(255,51,102,0.6);
         }
-        .subtitle { 
-            color:#ccc; 
-            font-size:1.35rem; 
+        .subtitle {
+            color:#ccc;
+            font-size:1.35rem;
             margin-top:4px;
         }
-
         .buscador-container {
             position:relative;
             width:100%;
@@ -134,7 +129,6 @@
             color:#ffcc00;
             pointer-events:none;
         }
-
         main { max-width:1200px; margin:auto; padding:0 15px 80px; }
         .welcome {
             background:rgba(12,12,12,0.75);
@@ -152,7 +146,6 @@
             border:1px solid #444; padding:9px 18px;
             border-radius:6px;
         }
-
         .productos {
             display:flex; flex-wrap:wrap; gap:28px; justify-content:center;
         }
@@ -162,23 +155,21 @@
         }
         .card img { width:100%; height:220px; object-fit:cover; }
         .card-body { padding:20px; text-align:center; }
-        .precio { 
-            font-size:1.6rem; 
-            margin:12px 0 18px; 
-            font-weight:bold; 
-            color:var(--accent); 
+        .precio {
+            font-size:1.6rem;
+            margin:12px 0 18px;
+            font-weight:bold;
+            color:var(--accent);
         }
         .buybtn {
             background:white; color:black; border:none;
             padding:11px 26px; border-radius:50px; font-weight:bold;
         }
-
         #btn-carrito {
             position:fixed; bottom:35px; right:35px;
             background:white; color:black; padding:15px 28px;
             border-radius:50px; font-weight:bold; display:none;
         }
-
         #no-resultados {
             display:none;
             text-align:center;
@@ -187,8 +178,7 @@
             font-size:1.4rem;
             width:100%;
         }
-
-        /* ====================== MODALES  ====================== */
+        /* ====================== MODALES ====================== */
         #modal-carrito, #modal-pago {
             display:none; position:fixed; inset:0;
             background:rgba(0,0,0,0.9); align-items:center; justify-content:center;
@@ -198,7 +188,7 @@
             border-radius:16px; width:92%; max-width:540px; padding:32px;
             position:relative;
         }
-        /* Barra superior  */
+        /* Barra superior */
         .modal-box h2 {
             background:#220044;
             border:2px solid var(--primary);
@@ -216,7 +206,6 @@
             border-radius:10px;
         }
         .total { font-size:1.5rem; text-align:right; margin:35px 0; }
-
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -224,12 +213,10 @@
     </style>
 </head>
 <body>
-
 <div id="loginArea">
     <div class="container">
         <h1 style="text-align:center;color:#ff3366">MixKit Records</h1>
         <p class="subtitle">Inicia sesión o regístrate</p>
-
         <div id="login">
             <h2 style="text-align:center">Iniciar Sesión</h2>
             <form onsubmit="return iniciarSesion()">
@@ -239,7 +226,6 @@
             </form>
             <div class="switch">¿No tienes cuenta? <a href="#" onclick="mostrarRegistro()">Regístrate</a></div>
         </div>
-
         <div id="registro" class="hidden">
             <h2 style="text-align:center">Crear Cuenta</h2>
             <form onsubmit="return registrar()">
@@ -251,27 +237,25 @@
         </div>
     </div>
 </div>
-
 <div id="tienda">
     <header>
+        <!-- Logo cambiado a .jpg para que se vea correctamente en GitHub Pages -->
         <img src="MixKitLogo.jpg" class="logo-header" alt="MixKit Logo">
         <div class="titulo-header">
             <h1>MixKit Records</h1>
             <div class="subtitle">Instrumentos Musicales</div>
         </div>
-        
+       
         <div class="buscador-container">
             <input type="text" id="buscador" placeholder="🔍 Buscar instrumentos... (ej: guitarra, teclado)">
             <span class="icono-buscador">🔎</span>
         </div>
     </header>
-
     <main>
         <div class="welcome">
             <button class="logout-btn" onclick="cerrarSesion()">Cerrar sesión</button>
             <h2>Bienvenido <span id="usuario"></span> 🎸</h2>
         </div>
-
         <div class="productos" id="lista-productos">
             <!-- productos -->
             <div class="card">
@@ -282,7 +266,6 @@
                     <button class="buybtn" onclick="agregar('Guitarra Eléctrica',12500,'Guitarra elec.jpg')">Añadir al carrito</button>
                 </div>
             </div>
-
             <div class="card">
                 <img src="Bateria.jpg" alt="Batería Acústica">
                 <div class="card-body">
@@ -291,7 +274,6 @@
                     <button class="buybtn" onclick="agregar('Batería Acústica',18900,'Bateria.jpg')">Añadir al carrito</button>
                 </div>
             </div>
-
             <div class="card">
                 <img src="Teclado 61.jpg" alt="Teclado 61 teclas">
                 <div class="card-body">
@@ -300,7 +282,6 @@
                     <button class="buybtn" onclick="agregar('Teclado 61 teclas',9800,'Teclado 61.jpg')">Añadir al carrito</button>
                 </div>
             </div>
-
             <div class="card">
                 <img src="Flauta.jpg" alt="Flauta Transversal Profesional">
                 <div class="card-body">
@@ -309,7 +290,6 @@
                     <button class="buybtn" onclick="agregar('Flauta Transversal',7500,'Flauta.jpg')">Añadir al carrito</button>
                 </div>
             </div>
-
             <div class="card">
                 <img src="Guitarra acus.jpg" alt="Guitarra Acústica">
                 <div class="card-body">
@@ -318,7 +298,6 @@
                     <button class="buybtn" onclick="agregar('Guitarra Acústica',8200,'Guitarra acus.jpg')">Añadir al carrito</button>
                 </div>
             </div>
-
             <div class="card">
                 <img src="Violin.jpg" alt="Violín Profesional">
                 <div class="card-body">
@@ -327,7 +306,6 @@
                     <button class="buybtn" onclick="agregar('Violín Profesional',9500,'Violin.jpg')">Añadir al carrito</button>
                 </div>
             </div>
-
             <div class="card">
                 <img src="Sax.jpg" alt="Saxofón Alto">
                 <div class="card-body">
@@ -336,7 +314,6 @@
                     <button class="buybtn" onclick="agregar('Saxofón Alto',14500,'Sax.jpg')">Añadir al carrito</button>
                 </div>
             </div>
-
             <div class="card">
                 <img src="Piano dig.jpg" alt="Piano Digital">
                 <div class="card-body">
@@ -346,18 +323,15 @@
                 </div>
             </div>
         </div>
-
         <div id="no-resultados">
             No se encontraron productos con ese nombre 😔<br>
             <small>Prueba con otras palabras como "guitarra", "teclado" o "saxofón"</small>
         </div>
     </main>
-
     <button id="btn-carrito" onclick="mostrarCarrito()">
         🛒 Carrito (<span id="contador">0</span>)
     </button>
-
-    <!-- MODAL CARRITO  -->
+    <!-- MODAL CARRITO -->
     <div id="modal-carrito">
         <div class="modal-box">
             <h2>Tu Carrito</h2>
@@ -368,8 +342,7 @@
             <button onclick="cerrarCarrito()" class="modal-btn secondary">Cerrar</button>
         </div>
     </div>
-
-    <!-- MODAL PAGO  -->
+    <!-- MODAL PAGO -->
     <div id="modal-pago">
         <div class="modal-box">
             <h2>Finalizar Compra</h2>
@@ -378,7 +351,6 @@
                 <option value="paypal">PayPal</option>
                 <option value="transferencia">Transferencia</option>
             </select>
-
             <div id="pago-tarjeta">
                 <input placeholder="Número de tarjeta">
                 <input placeholder="Nombre en tarjeta">
@@ -387,25 +359,20 @@
             </div>
             <div id="pago-paypal" class="hidden"><p>Pagar con PayPal</p></div>
             <div id="pago-transferencia" class="hidden"><p>Transferir a cuenta MixKit Records</p></div>
-
             <div id="loading-pago" class="hidden">
                 <p style="text-align:center; font-size:1.3rem; color:#ff3366; margin:20px 0;">Procesando tu pago...</p>
                 <div style="text-align:center; font-size:2.5rem; animation:spin 1.5s linear infinite;">🔄</div>
             </div>
-
             <button id="confirm-pago" onclick="procesarPago()" class="modal-btn primary">Confirmar Pago</button>
             <button onclick="cerrarPago()" class="modal-btn secondary">Cancelar</button>
         </div>
     </div>
 </div>
-
 <script>
     // PROYECTO FINAL - MIXKIT RECORDS
-
     let usuarios = JSON.parse(localStorage.getItem("usuariosMixKit")) || [];
     let carrito = [];
     let sesionActual = null;
-
     const els = {
         loginArea: document.getElementById("loginArea"),
         tienda: document.getElementById("tienda"),
@@ -423,20 +390,17 @@
         noResultados: document.getElementById("no-resultados"),
         productosContainer: document.getElementById("lista-productos")
     };
-
     function getUsuarioNombre() {
         return sesionActual ? sesionActual.correo.split("@")[0] : "Usuario";
     }
-
-    function mostrarLogin() { 
-        document.getElementById("registro").classList.add("hidden"); 
-        document.getElementById("login").classList.remove("hidden"); 
+    function mostrarLogin() {
+        document.getElementById("registro").classList.add("hidden");
+        document.getElementById("login").classList.remove("hidden");
     }
-    function mostrarRegistro() { 
-        document.getElementById("login").classList.add("hidden"); 
-        document.getElementById("registro").classList.remove("hidden"); 
+    function mostrarRegistro() {
+        document.getElementById("login").classList.add("hidden");
+        document.getElementById("registro").classList.remove("hidden");
     }
-
     function registrar() {
         const correo = document.getElementById("reg_correo").value.trim().toLowerCase();
         const contra = document.getElementById("reg_contra").value;
@@ -448,7 +412,6 @@
         mostrarLogin();
         return false;
     }
-
     function iniciarSesion() {
         const correo = document.getElementById("login_correo").value.trim().toLowerCase();
         const contra = document.getElementById("login_contra").value;
@@ -458,7 +421,6 @@
         abrirTienda();
         return false;
     }
-
     function abrirTienda() {
         sesionActual = JSON.parse(localStorage.getItem("sesionActiva"));
         els.loginArea.style.display = "none";
@@ -467,31 +429,26 @@
         carrito = JSON.parse(localStorage.getItem("carrito_" + sesionActual.correo)) || [];
         actualizarCarrito();
     }
-
     function cerrarSesion() {
         localStorage.removeItem("sesionActiva");
         if (sesionActual) localStorage.removeItem("carrito_" + sesionActual.correo);
         location.reload();
     }
-
     function guardarCarrito() {
         if (sesionActual) {
             localStorage.setItem("carrito_" + sesionActual.correo, JSON.stringify(carrito));
         }
     }
-
     function agregar(nombre, precio, imagen) {
         carrito.push({ nombre, precio, imagen });
         guardarCarrito();
         actualizarCarrito();
     }
-
     function eliminar(i) {
         carrito.splice(i, 1);
         guardarCarrito();
         actualizarCarrito();
     }
-
     function vaciar() {
         if (confirm("¿Vaciar todo el carrito?")) {
             carrito = [];
@@ -499,11 +456,9 @@
             actualizarCarrito();
         }
     }
-
     function actualizarCarrito() {
         els.items.innerHTML = "";
         let total = 0;
-
         carrito.forEach((p, i) => {
             total += p.precio;
             const div = document.createElement("div");
@@ -515,12 +470,10 @@
             `;
             els.items.appendChild(div);
         });
-
         els.total.textContent = "Total RD$" + total.toLocaleString();
         els.contador.textContent = carrito.length;
         els.btnCarrito.style.display = carrito.length > 0 ? "block" : "none";
     }
-
     function mostrarCarrito() {
         els.modalCarrito.querySelector("h2").textContent = `Tu Carrito, ${getUsuarioNombre()} 🎸`;
         els.modalCarrito.style.display = "flex";
@@ -529,28 +482,24 @@
         els.modalCarrito.querySelector("h2").textContent = "Tu Carrito";
         els.modalCarrito.style.display = "none";
     }
-
     function abrirPago() {
         if (carrito.length === 0) {
             alert("Tu carrito está vacío. Añade productos antes de comprar.");
             return;
         }
-        cerrarCarrito(); /* ← CORREGIDO: evita superposición de modales */
+        cerrarCarrito(); 
         els.modalPago.querySelector("h2").textContent = `Finalizar Compra, ${getUsuarioNombre()}`;
         els.modalPago.style.display = "flex";
-
         els.metodo.value = "tarjeta";
         mostrarMetodo();
         document.querySelectorAll("#pago-tarjeta input").forEach(i => i.value = "");
         els.loadingPago.classList.add("hidden");
     }
-
     function cerrarPago() {
         els.modalPago.querySelector("h2").textContent = "Finalizar Compra";
         els.modalPago.style.display = "none";
         els.loadingPago.classList.add("hidden");
     }
-
     function mostrarMetodo() {
         const m = els.metodo.value;
         document.getElementById("pago-tarjeta").classList.add("hidden");
@@ -560,7 +509,6 @@
         if (m === "paypal") document.getElementById("pago-paypal").classList.remove("hidden");
         if (m === "transferencia") document.getElementById("pago-transferencia").classList.remove("hidden");
     }
-
     function isValidCardNumber(number) {
         number = number.replace(/\s/g, '');
         if (!/^\d+$/.test(number) || number.length < 13 || number.length > 19) return false;
@@ -583,7 +531,6 @@
         if (year < currentYear || (year === currentYear && month < currentMonth)) return false;
         return true;
     }
-
     function procesarPago() {
         const metodo = els.metodo.value;
         if (metodo === "tarjeta") {
@@ -592,18 +539,15 @@
             const nombre = inputs[1].value.trim();
             const exp = inputs[2].value.trim();
             const cvv = inputs[3].value.trim();
-
             if (!numero || !nombre || !exp || !cvv) { alert("Completa todos los campos de la tarjeta."); return; }
             if (!isValidCardNumber(numero)) { alert("Número de tarjeta inválido."); return; }
             if (!isValidExpiry(exp)) { alert("Fecha de expiración inválida."); return; }
             if (!/^\d{3,4}$/.test(cvv)) { alert("CVV inválido."); return; }
             if (nombre.length < 3) { alert("Nombre en tarjeta inválido."); return; }
         }
-
         els.loadingPago.classList.remove("hidden");
         els.confirmPago.disabled = true;
         els.confirmPago.textContent = "Procesando...";
-
         setTimeout(() => {
             els.loadingPago.classList.add("hidden");
             els.confirmPago.disabled = false;
@@ -616,14 +560,12 @@
             cerrarCarrito();
         }, 1800);
     }
-
     function inicializarBuscador() {
         const cards = els.productosContainer.querySelectorAll('.card');
-        
+       
         els.buscador.addEventListener('input', () => {
             const termino = els.buscador.value.toLowerCase().trim();
             let encontrados = 0;
-
             cards.forEach(card => {
                 const nombreProducto = card.querySelector('h4').textContent.toLowerCase();
                 if (nombreProducto.includes(termino) || termino === "") {
@@ -633,7 +575,6 @@
                     card.style.display = 'none';
                 }
             });
-
             if (encontrados === 0 && termino !== "") {
                 els.noResultados.style.display = 'block';
             } else {
@@ -641,13 +582,11 @@
             }
         });
     }
-
     if (localStorage.getItem("sesionActiva")) {
         abrirTienda();
     }
-
     window.onload = function() {
-        inicializarBuscador(); /* ← CORREGIDO: el buscador funciona siempre (incluyendo después de login) */
+        inicializarBuscador();
     };
 </script>
 </body>
