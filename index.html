@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>MixKit Records</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --bg: #0a0015;
+            --primary: #ff3366;
+            --dark: #1a0033;
+            --card: #080808;
+            --text: #fff;
+            --accent: #ffcc00;
+        }
+
+        body { 
+            margin:0; padding:0; font-family:Arial,sans-serif; 
+            background:var(--bg); color:var(--text); min-height:100vh; 
+        }
+        .hidden { display:none; }
+
+        /* ====================== LOGIN (semana 1) ====================== */
+        .container { 
+            max-width:420px; width:90%; margin:80px auto; 
+            background:var(--dark); border:2px solid var(--primary); 
+            border-radius:16px; padding:40px; 
+            box-shadow:0 0 20px rgba(255,51,102,0.25); 
+        }
+        input, select { 
+            width:100%; padding:14px; margin:8px 0 20px; 
+            background:#220044; border:1px solid #555; 
+            border-radius:8px; color:var(--text); font-size:1rem; 
+        }
+        button { cursor:pointer; }
+        .loginbtn { 
+            width:100%; padding:14px; background:var(--primary); 
+            color:white; border:none; border-radius:8px; 
+            font-weight:bold; font-size:1.1rem; 
+        }
+
+        /* ====================== TIENDA  ====================== */
+        #tienda {
+            display:none;
+            background: transparent;
+            min-height:100vh;
+            position:relative;
+        }
+        /* Logo de fondo */
+        #tienda::after {
+            content:"";
+            position:fixed;
+            inset:0;
+            background: url("MixKitLogo.jfif") center/cover fixed no-repeat;
+            filter: blur(14px);          
+            opacity: 0.65;
+            z-index:-2;
+        }
+        /* Overlay */
+        #tienda::before {
+            content:"";
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,0.82);
+            z-index:-1;
+        }
+
+        header {
+            text-align:center; 
+            padding:40px 20px 25px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap:20px;
+            flex-wrap:wrap;
+        }
+        .logo-header {
+            width:65px;
+            height:65px;
+            border-radius:50%;
+            border:3px solid var(--primary);
+            box-shadow:0 0 15px rgba(255,51,102,0.4);
+            filter: blur(1.2px);
+            opacity: 0.92;
+            transition: filter 0.4s;
+        }
+        .logo-header:hover { filter: blur(0.4px); }
+        .titulo-header {
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+        }
+        h1 { 
+            font-size:3.4rem; 
+            margin:0; 
+            color:var(--primary);
+            text-shadow:0 0 10px rgba(255,51,102,0.6);
+        }
+        .subtitle { 
+            color:#ccc; 
+            font-size:1.35rem; 
+            margin-top:4px;
+        }
+
+        .buscador-container {
+            position:relative;
+            width:100%;
+            max-width:420px;
+            margin-top:15px;
+        }
+        #buscador {
+            width:100%;
+            padding:16px 55px 16px 22px;
+            background:#220044;
+            border:2px solid var(--primary);
+            border-radius:50px;
+            color:var(--text);
+            font-size:1.05rem;
+            box-shadow:0 4px 15px rgba(0,0,0,0.3);
+            transition:all 0.3s;
+        }
+        #buscador:focus {
+            outline:none;
+            border-color:#ffcc00;
+            box-shadow:0 0 20px rgba(255,204,0,0.5);
+            transform:scale(1.02);
+        }
+        .icono-buscador {
+            position:absolute;
+            right:22px;
+            top:50%;
+            transform:translateY(-50%);
+            font-size:1.6rem;
+            color:#ffcc00;
+            pointer-events:none;
+        }
+
+        main { max-width:1200px; margin:auto; padding:0 15px 80px; }
+        .welcome {
+            background:rgba(12,12,12,0.75);
+            border:1px solid #3a3a3a;
+            border-radius:14px;
+            padding:28px;
+            text-align:center;
+            margin:35px auto;
+            max-width:720px;
+            position:relative;
+        }
+        .logout-btn {
+            position:absolute; top:18px; right:20px;
+            background:#1c1c1c; color:#ddd;
+            border:1px solid #444; padding:9px 18px;
+            border-radius:6px;
+        }
+
+        .productos {
+            display:flex; flex-wrap:wrap; gap:28px; justify-content:center;
+        }
+        .card {
+            width:300px; background:rgba(10,10,10,0.92);
+            border:1px solid #2e2e2e; border-radius:14px; overflow:hidden;
+        }
+        .card img { width:100%; height:220px; object-fit:cover; }
+        .card-body { padding:20px; text-align:center; }
+        .precio { 
+            font-size:1.6rem; 
+            margin:12px 0 18px; 
+            font-weight:bold; 
+            color:var(--accent); 
+        }
+        .buybtn {
+            background:white; color:black; border:none;
+            padding:11px 26px; border-radius:50px; font-weight:bold;
+        }
+
+        #btn-carrito {
+            position:fixed; bottom:35px; right:35px;
+            background:white; color:black; padding:15px 28px;
+            border-radius:50px; font-weight:bold; display:none;
+        }
+
+        #no-resultados {
+            display:none;
+            text-align:center;
+            padding:50px 20px;
+            color:#ff9999;
+            font-size:1.4rem;
+            width:100%;
+        }
+
+        /* ====================== MODALES  ====================== */
+        #modal-carrito, #modal-pago {
+            display:none; position:fixed; inset:0;
+            background:rgba(0,0,0,0.9); align-items:center; justify-content:center;
+        }
+        .modal-box {
+            background:var(--card); border:2px solid #3a3a3a;
+            border-radius:16px; width:92%; max-width:540px; padding:32px;
+            position:relative;
+        }
+        /* Barra superior  */
+        .modal-box h2 {
+            background:#220044;
+            border:2px solid var(--primary);
+            border-radius:50px;
+            padding:14px 30px;
+            text-align:center;
+            font-size:1.65rem;
+            margin:-10px -10px 25px -10px;
+            box-shadow:0 4px 15px rgba(0,0,0,0.3);
+            color:var(--text);
+        }
+        .item {
+            display:flex; align-items:center; gap:15px;
+            background:#191919; padding:14px; margin:14px 0;
+            border-radius:10px;
+        }
+        .total { font-size:1.5rem; text-align:right; margin:35px 0; }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+<div id="loginArea">
+    <div class="container">
+        <h1 style="text-align:center;color:#ff3366">MixKit Records</h1>
+        <p class="subtitle">Inicia sesión o regístrate</p>
+
+        <div id="login">
+            <h2 style="text-align:center">Iniciar Sesión</h2>
+            <form onsubmit="return iniciarSesion()">
+                <input type="email" id="login_correo" placeholder="Correo electrónico" required>
+                <input type="password" id="login_contra" placeholder="Contraseña" required>
+                <button class="loginbtn">Entrar</button>
+            </form>
+            <div class="switch">¿No tienes cuenta? <a href="#" onclick="mostrarRegistro()">Regístrate</a></div>
+        </div>
+
+        <div id="registro" class="hidden">
+            <h2 style="text-align:center">Crear Cuenta</h2>
+            <form onsubmit="return registrar()">
+                <input type="email" id="reg_correo" placeholder="Correo electrónico" required>
+                <input type="password" id="reg_contra" placeholder="Contraseña (mín 6)" required>
+                <button class="loginbtn">Registrarme</button>
+            </form>
+            <div class="switch"><a href="#" onclick="mostrarLogin()">Iniciar sesión</a></div>
+        </div>
+    </div>
+</div>
+
+<div id="tienda">
+    <header>
+        <img src="MixKitLogo.jfif" class="logo-header" alt="MixKit Logo">
+        <div class="titulo-header">
+            <h1>MixKit Records</h1>
+            <div class="subtitle">Instrumentos Musicales</div>
+        </div>
+        
+        <div class="buscador-container">
+            <input type="text" id="buscador" placeholder="🔍 Buscar instrumentos... (ej: guitarra, teclado)">
+            <span class="icono-buscador">🔎</span>
+        </div>
+    </header>
+
+    <main>
+        <div class="welcome">
+            <button class="logout-btn" onclick="cerrarSesion()">Cerrar sesión</button>
+            <h2>Bienvenido <span id="usuario"></span> 🎸</h2>
+        </div>
+
+        <div class="productos" id="lista-productos">
+            <!-- productos -->
+            <div class="card">
+                <img src="Guitarra elec.jpg" alt="Guitarra Eléctrica">
+                <div class="card-body">
+                    <h4>Guitarra Eléctrica</h4>
+                    <div class="precio">RD$ 12,500</div>
+                    <button class="buybtn" onclick="agregar('Guitarra Eléctrica',12500,'Guitarra elec.jpg')">Añadir al carrito</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="Bateria.jpg" alt="Batería Acústica">
+                <div class="card-body">
+                    <h4>Batería Acústica</h4>
+                    <div class="precio">RD$ 18,900</div>
+                    <button class="buybtn" onclick="agregar('Batería Acústica',18900,'Bateria.jpg')">Añadir al carrito</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="Teclado 61.jpg" alt="Teclado 61 teclas">
+                <div class="card-body">
+                    <h4>Teclado 61 teclas</h4>
+                    <div class="precio">RD$ 9,800</div>
+                    <button class="buybtn" onclick="agregar('Teclado 61 teclas',9800,'Teclado 61.jpg')">Añadir al carrito</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="Flauta.jpg" alt="Flauta Transversal Profesional">
+                <div class="card-body">
+                    <h4>Flauta Transversal Profesional</h4>
+                    <div class="precio">RD$ 7,500</div>
+                    <button class="buybtn" onclick="agregar('Flauta Transversal',7500,'Flauta.jpg')">Añadir al carrito</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="Guitarra acus.jpg" alt="Guitarra Acústica">
+                <div class="card-body">
+                    <h4>Guitarra Acústica</h4>
+                    <div class="precio">RD$ 8,200</div>
+                    <button class="buybtn" onclick="agregar('Guitarra Acústica',8200,'Guitarra acus.jpg')">Añadir al carrito</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="Violin.jpg" alt="Violín Profesional">
+                <div class="card-body">
+                    <h4>Violín Profesional</h4>
+                    <div class="precio">RD$ 9,500</div>
+                    <button class="buybtn" onclick="agregar('Violín Profesional',9500,'Violin.jpg')">Añadir al carrito</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="Sax.jpg" alt="Saxofón Alto">
+                <div class="card-body">
+                    <h4>Saxofón Alto</h4>
+                    <div class="precio">RD$ 14,500</div>
+                    <button class="buybtn" onclick="agregar('Saxofón Alto',14500,'Sax.jpg')">Añadir al carrito</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="Piano dig.jpg" alt="Piano Digital">
+                <div class="card-body">
+                    <h4>Piano Digital</h4>
+                    <div class="precio">RD$ 22,000</div>
+                    <button class="buybtn" onclick="agregar('Piano Digital',22000,'Piano dig.jpg')">Añadir al carrito</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="no-resultados">
+            No se encontraron productos con ese nombre 😔<br>
+            <small>Prueba con otras palabras como "guitarra", "teclado" o "saxofón"</small>
+        </div>
+    </main>
+
+    <button id="btn-carrito" onclick="mostrarCarrito()">
+        🛒 Carrito (<span id="contador">0</span>)
+    </button>
+
+    <!-- MODAL CARRITO  -->
+    <div id="modal-carrito">
+        <div class="modal-box">
+            <h2>Tu Carrito</h2>
+            <div id="items"></div>
+            <div class="total" id="total">Total RD$0</div>
+            <button onclick="vaciar()" class="modal-btn secondary">Vaciar carrito</button>
+            <button onclick="abrirPago()" class="modal-btn primary">Comprar</button>
+            <button onclick="cerrarCarrito()" class="modal-btn secondary">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- MODAL PAGO  -->
+    <div id="modal-pago">
+        <div class="modal-box">
+            <h2>Finalizar Compra</h2>
+            <select id="metodo" onchange="mostrarMetodo()">
+                <option value="tarjeta">Tarjeta</option>
+                <option value="paypal">PayPal</option>
+                <option value="transferencia">Transferencia</option>
+            </select>
+
+            <div id="pago-tarjeta">
+                <input placeholder="Número de tarjeta">
+                <input placeholder="Nombre en tarjeta">
+                <input placeholder="MM/AA">
+                <input placeholder="CVV">
+            </div>
+            <div id="pago-paypal" class="hidden"><p>Pagar con PayPal</p></div>
+            <div id="pago-transferencia" class="hidden"><p>Transferir a cuenta MixKit Records</p></div>
+
+            <div id="loading-pago" class="hidden">
+                <p style="text-align:center; font-size:1.3rem; color:#ff3366; margin:20px 0;">Procesando tu pago...</p>
+                <div style="text-align:center; font-size:2.5rem; animation:spin 1.5s linear infinite;">🔄</div>
+            </div>
+
+            <button id="confirm-pago" onclick="procesarPago()" class="modal-btn primary">Confirmar Pago</button>
+            <button onclick="cerrarPago()" class="modal-btn secondary">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // PROYECTO FINAL - MIXKIT RECORDS
+
+    let usuarios = JSON.parse(localStorage.getItem("usuariosMixKit")) || [];
+    let carrito = [];
+    let sesionActual = null;
+
+    const els = {
+        loginArea: document.getElementById("loginArea"),
+        tienda: document.getElementById("tienda"),
+        usuario: document.getElementById("usuario"),
+        items: document.getElementById("items"),
+        total: document.getElementById("total"),
+        contador: document.getElementById("contador"),
+        btnCarrito: document.getElementById("btn-carrito"),
+        modalCarrito: document.getElementById("modal-carrito"),
+        modalPago: document.getElementById("modal-pago"),
+        metodo: document.getElementById("metodo"),
+        loadingPago: document.getElementById("loading-pago"),
+        confirmPago: document.getElementById("confirm-pago"),
+        buscador: document.getElementById("buscador"),
+        noResultados: document.getElementById("no-resultados"),
+        productosContainer: document.getElementById("lista-productos")
+    };
+
+    function getUsuarioNombre() {
+        return sesionActual ? sesionActual.correo.split("@")[0] : "Usuario";
+    }
+
+    function mostrarLogin() { 
+        document.getElementById("registro").classList.add("hidden"); 
+        document.getElementById("login").classList.remove("hidden"); 
+    }
+    function mostrarRegistro() { 
+        document.getElementById("login").classList.add("hidden"); 
+        document.getElementById("registro").classList.remove("hidden"); 
+    }
+
+    function registrar() {
+        const correo = document.getElementById("reg_correo").value.trim().toLowerCase();
+        const contra = document.getElementById("reg_contra").value;
+        if (contra.length < 6) { alert("La contraseña debe tener al menos 6 caracteres"); return false; }
+        if (usuarios.some(u => u.correo === correo)) { alert("Ese correo ya está registrado"); return false; }
+        usuarios.push({ correo, contra });
+        localStorage.setItem("usuariosMixKit", JSON.stringify(usuarios));
+        alert("Cuenta creada correctamente");
+        mostrarLogin();
+        return false;
+    }
+
+    function iniciarSesion() {
+        const correo = document.getElementById("login_correo").value.trim().toLowerCase();
+        const contra = document.getElementById("login_contra").value;
+        const user = usuarios.find(u => u.correo === correo && u.contra === contra);
+        if (!user) { alert("Correo o contraseña incorrectos"); return false; }
+        localStorage.setItem("sesionActiva", JSON.stringify(user));
+        abrirTienda();
+        return false;
+    }
+
+    function abrirTienda() {
+        sesionActual = JSON.parse(localStorage.getItem("sesionActiva"));
+        els.loginArea.style.display = "none";
+        els.tienda.style.display = "block";
+        els.usuario.textContent = getUsuarioNombre();
+        carrito = JSON.parse(localStorage.getItem("carrito_" + sesionActual.correo)) || [];
+        actualizarCarrito();
+    }
+
+    function cerrarSesion() {
+        localStorage.removeItem("sesionActiva");
+        if (sesionActual) localStorage.removeItem("carrito_" + sesionActual.correo);
+        location.reload();
+    }
+
+    function guardarCarrito() {
+        if (sesionActual) {
+            localStorage.setItem("carrito_" + sesionActual.correo, JSON.stringify(carrito));
+        }
+    }
+
+    function agregar(nombre, precio, imagen) {
+        carrito.push({ nombre, precio, imagen });
+        guardarCarrito();
+        actualizarCarrito();
+    }
+
+    function eliminar(i) {
+        carrito.splice(i, 1);
+        guardarCarrito();
+        actualizarCarrito();
+    }
+
+    function vaciar() {
+        if (confirm("¿Vaciar todo el carrito?")) {
+            carrito = [];
+            guardarCarrito();
+            actualizarCarrito();
+        }
+    }
+
+    function actualizarCarrito() {
+        els.items.innerHTML = "";
+        let total = 0;
+
+        carrito.forEach((p, i) => {
+            total += p.precio;
+            const div = document.createElement("div");
+            div.className = "item";
+            div.innerHTML = `
+                ${p.imagen ? `<img src="${p.imagen}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;flex-shrink:0;">` : ''}
+                <div style="flex:1;">${p.nombre}<br>RD$${p.precio.toLocaleString()}</div>
+                <button onclick="eliminar(${i})" style="background:#ff3366;color:white;border:none;padding:8px 14px;border-radius:50%;font-weight:bold;">X</button>
+            `;
+            els.items.appendChild(div);
+        });
+
+        els.total.textContent = "Total RD$" + total.toLocaleString();
+        els.contador.textContent = carrito.length;
+        els.btnCarrito.style.display = carrito.length > 0 ? "block" : "none";
+    }
+
+    function mostrarCarrito() {
+        els.modalCarrito.querySelector("h2").textContent = `Tu Carrito, ${getUsuarioNombre()} 🎸`;
+        els.modalCarrito.style.display = "flex";
+    }
+    function cerrarCarrito() {
+        els.modalCarrito.querySelector("h2").textContent = "Tu Carrito";
+        els.modalCarrito.style.display = "none";
+    }
+
+    function abrirPago() {
+        if (carrito.length === 0) {
+            alert("Tu carrito está vacío. Añade productos antes de comprar.");
+            return;
+        }
+        cerrarCarrito(); /* ← CORREGIDO: evita superposición de modales */
+        els.modalPago.querySelector("h2").textContent = `Finalizar Compra, ${getUsuarioNombre()}`;
+        els.modalPago.style.display = "flex";
+
+        els.metodo.value = "tarjeta";
+        mostrarMetodo();
+        document.querySelectorAll("#pago-tarjeta input").forEach(i => i.value = "");
+        els.loadingPago.classList.add("hidden");
+    }
+
+    function cerrarPago() {
+        els.modalPago.querySelector("h2").textContent = "Finalizar Compra";
+        els.modalPago.style.display = "none";
+        els.loadingPago.classList.add("hidden");
+    }
+
+    function mostrarMetodo() {
+        const m = els.metodo.value;
+        document.getElementById("pago-tarjeta").classList.add("hidden");
+        document.getElementById("pago-paypal").classList.add("hidden");
+        document.getElementById("pago-transferencia").classList.add("hidden");
+        if (m === "tarjeta") document.getElementById("pago-tarjeta").classList.remove("hidden");
+        if (m === "paypal") document.getElementById("pago-paypal").classList.remove("hidden");
+        if (m === "transferencia") document.getElementById("pago-transferencia").classList.remove("hidden");
+    }
+
+    function isValidCardNumber(number) {
+        number = number.replace(/\s/g, '');
+        if (!/^\d+$/.test(number) || number.length < 13 || number.length > 19) return false;
+        let sum = 0, shouldDouble = false;
+        for (let i = number.length - 1; i >= 0; i--) {
+            let digit = parseInt(number[i]);
+            if (shouldDouble) { digit *= 2; if (digit > 9) digit -= 9; }
+            sum += digit;
+            shouldDouble = !shouldDouble;
+        }
+        return sum % 10 === 0;
+    }
+    function isValidExpiry(exp) {
+        if (!/^\d{2}\/\d{2}$/.test(exp)) return false;
+        let [month, year] = exp.split('/').map(n => parseInt(n));
+        if (month < 1 || month > 12) return false;
+        let now = new Date();
+        let currentYear = now.getFullYear() % 100;
+        let currentMonth = now.getMonth() + 1;
+        if (year < currentYear || (year === currentYear && month < currentMonth)) return false;
+        return true;
+    }
+
+    function procesarPago() {
+        const metodo = els.metodo.value;
+        if (metodo === "tarjeta") {
+            const inputs = document.querySelectorAll("#pago-tarjeta input");
+            const numero = inputs[0].value.trim().replace(/\s/g,'');
+            const nombre = inputs[1].value.trim();
+            const exp = inputs[2].value.trim();
+            const cvv = inputs[3].value.trim();
+
+            if (!numero || !nombre || !exp || !cvv) { alert("Completa todos los campos de la tarjeta."); return; }
+            if (!isValidCardNumber(numero)) { alert("Número de tarjeta inválido."); return; }
+            if (!isValidExpiry(exp)) { alert("Fecha de expiración inválida."); return; }
+            if (!/^\d{3,4}$/.test(cvv)) { alert("CVV inválido."); return; }
+            if (nombre.length < 3) { alert("Nombre en tarjeta inválido."); return; }
+        }
+
+        els.loadingPago.classList.remove("hidden");
+        els.confirmPago.disabled = true;
+        els.confirmPago.textContent = "Procesando...";
+
+        setTimeout(() => {
+            els.loadingPago.classList.add("hidden");
+            els.confirmPago.disabled = false;
+            els.confirmPago.textContent = "Confirmar Pago";
+            alert("✅ Pago procesado correctamente");
+            carrito = [];
+            guardarCarrito();
+            actualizarCarrito();
+            cerrarPago();
+            cerrarCarrito();
+        }, 1800);
+    }
+
+    function inicializarBuscador() {
+        const cards = els.productosContainer.querySelectorAll('.card');
+        
+        els.buscador.addEventListener('input', () => {
+            const termino = els.buscador.value.toLowerCase().trim();
+            let encontrados = 0;
+
+            cards.forEach(card => {
+                const nombreProducto = card.querySelector('h4').textContent.toLowerCase();
+                if (nombreProducto.includes(termino) || termino === "") {
+                    card.style.display = 'block';
+                    encontrados++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (encontrados === 0 && termino !== "") {
+                els.noResultados.style.display = 'block';
+            } else {
+                els.noResultados.style.display = 'none';
+            }
+        });
+    }
+
+    if (localStorage.getItem("sesionActiva")) {
+        abrirTienda();
+    }
+
+    window.onload = function() {
+        inicializarBuscador(); /* ← CORREGIDO: el buscador funciona siempre (incluyendo después de login) */
+    };
+</script>
+</body>
+</html>
