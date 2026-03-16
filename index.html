@@ -43,12 +43,12 @@
             min-height:100vh;
             position:relative;
         }
-        /* Logo de fondo - CAMBIADO A .jpg para que funcione en GitHub Pages */
+        /* Logo de fondo (con anti-caché para GitHub Pages) */
         #tienda::after {
             content:"";
             position:fixed;
             inset:0;
-            background: url("MixKitLogo.jpg") center/cover fixed no-repeat;
+            background: url("MixKitLogo.jpg?v=3") center/cover fixed no-repeat;
             filter: blur(14px);
             opacity: 0.65;
             z-index:-2;
@@ -239,13 +239,18 @@
 </div>
 <div id="tienda">
     <header>
-        <!-- Logo cambiado a .jpg para que se vea correctamente en GitHub Pages -->
-        <img src="MixKitLogo.jpg" class="logo-header" alt="MixKit Logo">
+        <!-- 🔥 LOGO ARREGLADO: anti-caché + fallback automático (por si el archivo no carga en GitHub) -->
+        <img src="MixKitLogo.jpg?v=3" 
+             class="logo-header" 
+             alt="MixKit Logo"
+             onerror="this.onerror=null; 
+                      this.src='https://via.placeholder.com/65/FF3366/FFFFFF?text=MixKit'; 
+                      console.error('⚠️ Logo MixKitLogo.jpg no encontrado → usando placeholder temporal');">
         <div class="titulo-header">
             <h1>MixKit Records</h1>
             <div class="subtitle">Instrumentos Musicales</div>
         </div>
-       
+      
         <div class="buscador-container">
             <input type="text" id="buscador" placeholder="🔍 Buscar instrumentos... (ej: guitarra, teclado)">
             <span class="icono-buscador">🔎</span>
@@ -487,7 +492,7 @@
             alert("Tu carrito está vacío. Añade productos antes de comprar.");
             return;
         }
-        cerrarCarrito(); 
+        cerrarCarrito();
         els.modalPago.querySelector("h2").textContent = `Finalizar Compra, ${getUsuarioNombre()}`;
         els.modalPago.style.display = "flex";
         els.metodo.value = "tarjeta";
@@ -562,7 +567,7 @@
     }
     function inicializarBuscador() {
         const cards = els.productosContainer.querySelectorAll('.card');
-       
+      
         els.buscador.addEventListener('input', () => {
             const termino = els.buscador.value.toLowerCase().trim();
             let encontrados = 0;
@@ -587,6 +592,7 @@
     }
     window.onload = function() {
         inicializarBuscador();
+        console.log("✅ MixKit Records cargado correctamente. Revisa la consola (F12) si el logo no aparece.");
     };
 </script>
 </body>
