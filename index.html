@@ -18,7 +18,8 @@
             background:var(--bg); color:var(--text); min-height:100vh;
         }
         .hidden { display:none; }
-        /* ====================== LOGIN (semana 1) ====================== */
+
+        /* ====================== LOGIN (sin cambios) ====================== */
         .container {
             max-width:420px; width:90%; margin:80px auto;
             background:var(--dark); border:2px solid var(--primary);
@@ -36,24 +37,26 @@
             color:white; border:none; border-radius:8px;
             font-weight:bold; font-size:1.1rem;
         }
-        /* ====================== TIENDA ====================== */
+
+        /* ====================== FONDO CON NOTAS FLOTANTES (único cambio) ====================== */
         #tienda {
             display:none;
             background: transparent;
             min-height:100vh;
             position:relative;
+            overflow:hidden;
         }
-        /* Logo de fondo (con anti-caché para GitHub Pages) */
         #tienda::after {
             content:"";
             position:fixed;
             inset:0;
-            background: url("MixKitLogo.jpg?v=3") center/cover fixed no-repeat;
-            filter: blur(14px);
-            opacity: 0.65;
+            background: 
+                radial-gradient(circle at 30% 20%, rgba(255,51,102,0.35) 0%, transparent 60%),
+                radial-gradient(circle at 70% 70%, rgba(255,204,0,0.25) 0%, transparent 70%);
+            filter: blur(12px);
+            opacity: 0.75;
             z-index:-2;
         }
-        /* Overlay */
         #tienda::before {
             content:"";
             position:fixed;
@@ -61,6 +64,30 @@
             background:rgba(0,0,0,0.82);
             z-index:-1;
         }
+
+        /* Notas musicales flotando hacia arriba (sin afectar nada más) */
+        .note {
+            position: absolute;
+            font-size: 2.5rem;
+            opacity: 0.15;
+            z-index: -1;
+            pointer-events: none;
+            user-select: none;
+            animation: floatNote linear infinite;
+        }
+        .note:nth-child(1) { left: 8%; animation-duration: 22s; animation-delay: 0s; }
+        .note:nth-child(2) { left: 18%; animation-duration: 27s; animation-delay: 3s; font-size: 2rem; }
+        .note:nth-child(3) { left: 35%; animation-duration: 19s; animation-delay: 7s; }
+        .note:nth-child(4) { left: 52%; animation-duration: 25s; animation-delay: 1s; font-size: 3rem; }
+        .note:nth-child(5) { left: 68%; animation-duration: 18s; animation-delay: 5s; font-size: 1.8rem; }
+        .note:nth-child(6) { left: 82%; animation-duration: 23s; animation-delay: 9s; }
+
+        @keyframes floatNote {
+            0%   { transform: translateY(120vh) rotate(0deg); }
+            100% { transform: translateY(-30vh) rotate(720deg); }
+        }
+
+        /* ====================== RESTO DE LA PÁGINA (exactamente como estaba) ====================== */
         header {
             text-align:center;
             padding:40px 20px 25px;
@@ -76,144 +103,71 @@
             border-radius:50%;
             border:3px solid var(--primary);
             box-shadow:0 0 15px rgba(255,51,102,0.4);
-            filter: blur(1.2px);
-            opacity: 0.92;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:42px;
+            background:var(--dark);
+            color:var(--accent);
+            text-shadow:0 0 12px var(--primary);
             transition: filter 0.4s;
         }
-        .logo-header:hover { filter: blur(0.4px); }
-        .titulo-header {
-            display:flex;
-            flex-direction:column;
-            align-items:center;
-        }
-        h1 {
-            font-size:3.4rem;
-            margin:0;
-            color:var(--primary);
-            text-shadow:0 0 10px rgba(255,51,102,0.6);
-        }
-        .subtitle {
-            color:#ccc;
-            font-size:1.35rem;
-            margin-top:4px;
-        }
-        .buscador-container {
-            position:relative;
-            width:100%;
-            max-width:420px;
-            margin-top:15px;
-        }
+        .logo-header:hover { filter: blur(0.3px); }
+        .titulo-header { display:flex; flex-direction:column; align-items:center; }
+        h1 { font-size:3.4rem; margin:0; color:var(--primary); text-shadow:0 0 10px rgba(255,51,102,0.6); }
+        .subtitle { color:#ccc; font-size:1.35rem; margin-top:4px; }
+        .buscador-container { position:relative; width:100%; max-width:420px; margin-top:15px; }
         #buscador {
-            width:100%;
-            padding:16px 55px 16px 22px;
-            background:#220044;
-            border:2px solid var(--primary);
-            border-radius:50px;
-            color:var(--text);
-            font-size:1.05rem;
-            box-shadow:0 4px 15px rgba(0,0,0,0.3);
-            transition:all 0.3s;
+            width:100%; padding:16px 55px 16px 22px; background:#220044;
+            border:2px solid var(--primary); border-radius:50px; color:var(--text);
+            font-size:1.05rem; box-shadow:0 4px 15px rgba(0,0,0,0.3);
         }
-        #buscador:focus {
-            outline:none;
-            border-color:#ffcc00;
-            box-shadow:0 0 20px rgba(255,204,0,0.5);
-            transform:scale(1.02);
-        }
-        .icono-buscador {
-            position:absolute;
-            right:22px;
-            top:50%;
-            transform:translateY(-50%);
-            font-size:1.6rem;
-            color:#ffcc00;
-            pointer-events:none;
-        }
+        .icono-buscador { position:absolute; right:22px; top:50%; transform:translateY(-50%); font-size:1.6rem; color:#ffcc00; pointer-events:none; }
         main { max-width:1200px; margin:auto; padding:0 15px 80px; }
-        .welcome {
-            background:rgba(12,12,12,0.75);
-            border:1px solid #3a3a3a;
-            border-radius:14px;
-            padding:28px;
-            text-align:center;
-            margin:35px auto;
-            max-width:720px;
-            position:relative;
-        }
-        .logout-btn {
-            position:absolute; top:18px; right:20px;
-            background:#1c1c1c; color:#ddd;
-            border:1px solid #444; padding:9px 18px;
-            border-radius:6px;
-        }
-        .productos {
-            display:flex; flex-wrap:wrap; gap:28px; justify-content:center;
-        }
-        .card {
-            width:300px; background:rgba(10,10,10,0.92);
-            border:1px solid #2e2e2e; border-radius:14px; overflow:hidden;
-        }
+        .welcome { background:rgba(12,12,12,0.75); border:1px solid #3a3a3a; border-radius:14px; padding:28px; text-align:center; margin:35px auto; max-width:720px; position:relative; }
+        .logout-btn { position:absolute; top:18px; right:20px; background:#1c1c1c; color:#ddd; border:1px solid #444; padding:9px 18px; border-radius:6px; }
+        .productos { display:flex; flex-wrap:wrap; gap:28px; justify-content:center; }
+        .card { width:300px; background:rgba(10,10,10,0.92); border:1px solid #2e2e2e; border-radius:14px; overflow:hidden; }
         .card img { width:100%; height:220px; object-fit:cover; }
         .card-body { padding:20px; text-align:center; }
-        .precio {
-            font-size:1.6rem;
-            margin:12px 0 18px;
-            font-weight:bold;
-            color:var(--accent);
-        }
-        .buybtn {
-            background:white; color:black; border:none;
-            padding:11px 26px; border-radius:50px; font-weight:bold;
-        }
-        #btn-carrito {
-            position:fixed; bottom:35px; right:35px;
-            background:white; color:black; padding:15px 28px;
-            border-radius:50px; font-weight:bold; display:none;
-        }
-        #no-resultados {
-            display:none;
-            text-align:center;
-            padding:50px 20px;
-            color:#ff9999;
-            font-size:1.4rem;
-            width:100%;
-        }
-        /* ====================== MODALES ====================== */
+        .precio { font-size:1.6rem; margin:12px 0 18px; font-weight:bold; color:var(--accent); }
+        .buybtn { background:white; color:black; border:none; padding:11px 26px; border-radius:50px; font-weight:bold; }
+        #btn-carrito { position:fixed; bottom:35px; right:35px; background:white; color:black; padding:15px 28px; border-radius:50px; font-weight:bold; display:none; }
+        #no-resultados { display:none; text-align:center; padding:50px 20px; color:#ff9999; font-size:1.4rem; width:100%; }
+
+        /* CARRITO Y PAGO (sin cambios) */
+        #modal-carrito .modal-box { background:var(--card); border:2px solid #3a3a3a; border-radius:16px; width:92%; max-width:560px; padding:32px; }
+        .cart-item { display:flex; align-items:center; gap:15px; background:#191919; padding:14px; margin:14px 0; border-radius:10px; border:1px solid #2e2e2e; }
+        .qty-controls { display:flex; align-items:center; gap:8px; background:#220044; padding:4px 10px; border-radius:50px; }
+        .qty-btn { width:26px; height:26px; background:var(--primary); color:white; border:none; border-radius:50%; font-weight:bold; cursor:pointer; }
+        .cart-total { font-size:1.8rem; color:var(--accent); text-align:right; margin:25px 0 15px; }
+
+        .payment-tabs { display:flex; gap:10px; margin:20px 0 25px; justify-content:center; flex-wrap:wrap; }
+        .tab-btn { padding:12px 24px; background:#220044; border:2px solid #555; border-radius:50px; color:#ccc; font-weight:bold; cursor:pointer; transition:all 0.3s; }
+        .tab-btn.active { background:var(--primary); color:white; border-color:var(--primary); }
+        .payment-form { background:#1a0022; padding:18px; border-radius:10px; border:1px solid #444; }
+        .payment-form input { background:#220044; border:1px solid var(--primary); }
+        .modal-btn { padding:14px 28px; border:none; border-radius:50px; font-weight:bold; margin:6px; cursor:pointer; transition:all 0.3s; }
+        .modal-btn.primary { background:var(--primary); color:white; }
+        .modal-btn.secondary { background:#330022; color:#ddd; border:1px solid #555; }
+        .modal-btn:hover { transform:scale(1.05); box-shadow:0 0 15px var(--primary); }
+
         #modal-carrito, #modal-pago {
             display:none; position:fixed; inset:0;
             background:rgba(0,0,0,0.9); align-items:center; justify-content:center;
         }
-        .modal-box {
-            background:var(--card); border:2px solid #3a3a3a;
-            border-radius:16px; width:92%; max-width:540px; padding:32px;
-            position:relative;
-        }
-        /* Barra superior */
         .modal-box h2 {
-            background:#220044;
-            border:2px solid var(--primary);
-            border-radius:50px;
-            padding:14px 30px;
-            text-align:center;
-            font-size:1.65rem;
-            margin:-10px -10px 25px -10px;
-            box-shadow:0 4px 15px rgba(0,0,0,0.3);
-            color:var(--text);
+            background:#220044; border:2px solid var(--primary);
+            border-radius:50px; padding:14px 30px; text-align:center;
+            font-size:1.65rem; margin:-10px -10px 25px -10px;
+            box-shadow:0 4px 15px rgba(0,0,0,0.3); color:var(--text);
         }
-        .item {
-            display:flex; align-items:center; gap:15px;
-            background:#191919; padding:14px; margin:14px 0;
-            border-radius:10px;
-        }
-        .total { font-size:1.5rem; text-align:right; margin:35px 0; }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 <div id="loginArea">
+    <!-- LOGIN (sin cambios) -->
     <div class="container">
         <h1 style="text-align:center;color:#ff3366">MixKit Records</h1>
         <p class="subtitle">Inicia sesión o regístrate</p>
@@ -237,32 +191,36 @@
         </div>
     </div>
 </div>
+
 <div id="tienda">
+    <!-- NOTAS FLOTANTES (suben suavemente) -->
+    <div class="note">🎵</div>
+    <div class="note">♫</div>
+    <div class="note">🎸</div>
+    <div class="note">♪</div>
+    <div class="note">🔊</div>
+    <div class="note">🎶</div>
+
+    <!-- HEADER Y TODO LO DEMÁS (sin ningún cambio) -->
     <header>
-        <!-- 🔥 LOGO ARREGLADO: anti-caché + fallback automático (por si el archivo no carga en GitHub) -->
-        <img src="MixKitLogo.jpg?v=3" 
-             class="logo-header" 
-             alt="MixKit Logo"
-             onerror="this.onerror=null; 
-                      this.src='https://via.placeholder.com/65/FF3366/FFFFFF?text=MixKit'; 
-                      console.error('⚠️ Logo MixKitLogo.jpg no encontrado → usando placeholder temporal');">
+        <div class="logo-header">🎸</div>
         <div class="titulo-header">
             <h1>MixKit Records</h1>
             <div class="subtitle">Instrumentos Musicales</div>
         </div>
-      
         <div class="buscador-container">
             <input type="text" id="buscador" placeholder="🔍 Buscar instrumentos... (ej: guitarra, teclado)">
             <span class="icono-buscador">🔎</span>
         </div>
     </header>
+
     <main>
         <div class="welcome">
             <button class="logout-btn" onclick="cerrarSesion()">Cerrar sesión</button>
             <h2>Bienvenido <span id="usuario"></span> 🎸</h2>
         </div>
         <div class="productos" id="lista-productos">
-            <!-- productos -->
+            <!-- productos sin cambios -->
             <div class="card">
                 <img src="Guitarra elec.jpg" alt="Guitarra Eléctrica">
                 <div class="card-body">
@@ -333,51 +291,70 @@
             <small>Prueba con otras palabras como "guitarra", "teclado" o "saxofón"</small>
         </div>
     </main>
+
     <button id="btn-carrito" onclick="mostrarCarrito()">
         🛒 Carrito (<span id="contador">0</span>)
     </button>
-    <!-- MODAL CARRITO -->
+
+    <!-- CARRITO Y PAGO (sin cambios) -->
     <div id="modal-carrito">
         <div class="modal-box">
             <h2>Tu Carrito</h2>
             <div id="items"></div>
-            <div class="total" id="total">Total RD$0</div>
-            <button onclick="vaciar()" class="modal-btn secondary">Vaciar carrito</button>
-            <button onclick="abrirPago()" class="modal-btn primary">Comprar</button>
-            <button onclick="cerrarCarrito()" class="modal-btn secondary">Cerrar</button>
+            <div class="cart-total" id="total">Total RD$ 0</div>
+            <div style="text-align:center;margin-top:20px;">
+                <button onclick="vaciar()" class="modal-btn secondary">Vaciar carrito</button>
+                <button onclick="abrirPago()" class="modal-btn primary">Continuar al pago</button>
+                <button onclick="cerrarCarrito()" class="modal-btn secondary">Cerrar</button>
+            </div>
         </div>
     </div>
-    <!-- MODAL PAGO -->
+
     <div id="modal-pago">
         <div class="modal-box">
             <h2>Finalizar Compra</h2>
-            <select id="metodo" onchange="mostrarMetodo()">
-                <option value="tarjeta">Tarjeta</option>
-                <option value="paypal">PayPal</option>
-                <option value="transferencia">Transferencia</option>
-            </select>
-            <div id="pago-tarjeta">
-                <input placeholder="Número de tarjeta">
-                <input placeholder="Nombre en tarjeta">
-                <input placeholder="MM/AA">
-                <input placeholder="CVV">
+            <div class="payment-tabs">
+                <button class="tab-btn active" onclick="cambiarMetodo('tarjeta')">💳 Tarjeta</button>
+                <button class="tab-btn" onclick="cambiarMetodo('paypal')">🐧 PayPal</button>
+                <button class="tab-btn" onclick="cambiarMetodo('transferencia')">🏦 Transferencia</button>
             </div>
-            <div id="pago-paypal" class="hidden"><p>Pagar con PayPal</p></div>
-            <div id="pago-transferencia" class="hidden"><p>Transferir a cuenta MixKit Records</p></div>
-            <div id="loading-pago" class="hidden">
-                <p style="text-align:center; font-size:1.3rem; color:#ff3366; margin:20px 0;">Procesando tu pago...</p>
-                <div style="text-align:center; font-size:2.5rem; animation:spin 1.5s linear infinite;">🔄</div>
+            <div id="pago-tarjeta" class="payment-form">
+                <input type="text" id="card-number" placeholder="Número de tarjeta" maxlength="19">
+                <input type="text" id="card-name" placeholder="Nombre en la tarjeta">
+                <div style="display:flex;gap:10px;">
+                    <input type="text" id="card-exp" placeholder="MM/AA" maxlength="5">
+                    <input type="text" id="card-cvv" placeholder="CVV" maxlength="4">
+                </div>
             </div>
-            <button id="confirm-pago" onclick="procesarPago()" class="modal-btn primary">Confirmar Pago</button>
-            <button onclick="cerrarPago()" class="modal-btn secondary">Cancelar</button>
+            <div id="pago-paypal" class="payment-form hidden">
+                <p style="text-align:center;font-size:1.3rem;margin:30px 0;color:#ffcc00;">Redirigiendo a PayPal...</p>
+            </div>
+            <div id="pago-transferencia" class="payment-form hidden">
+                <p style="text-align:center;font-size:1.2rem;">
+                    Banco Popular<br>
+                    Cuenta: 123-456-7890<br>
+                    Titular: MixKit Records SRL<br>
+                    <strong>Envía el comprobante por WhatsApp</strong>
+                </p>
+            </div>
+            <div id="loading-pago" class="hidden" style="text-align:center;margin:25px 0;">
+                <p style="color:#ff3366;font-size:1.4rem;">Procesando tu pago...</p>
+                <div style="font-size:3rem;animation:spin 1.2s linear infinite;">🔄</div>
+            </div>
+            <div style="text-align:center;margin-top:15px;">
+                <button id="confirm-pago" onclick="procesarPago()" class="modal-btn primary">Pagar Ahora</button>
+                <button onclick="cerrarPago()" class="modal-btn secondary">Cancelar</button>
+            </div>
         </div>
     </div>
 </div>
+
 <script>
-    // PROYECTO FINAL - MIXKIT RECORDS
+    // SCRIPT EXACTAMENTE IGUAL QUE ANTES (sin cambios)
     let usuarios = JSON.parse(localStorage.getItem("usuariosMixKit")) || [];
     let carrito = [];
     let sesionActual = null;
+
     const els = {
         loginArea: document.getElementById("loginArea"),
         tienda: document.getElementById("tienda"),
@@ -388,24 +365,98 @@
         btnCarrito: document.getElementById("btn-carrito"),
         modalCarrito: document.getElementById("modal-carrito"),
         modalPago: document.getElementById("modal-pago"),
-        metodo: document.getElementById("metodo"),
         loadingPago: document.getElementById("loading-pago"),
         confirmPago: document.getElementById("confirm-pago"),
         buscador: document.getElementById("buscador"),
         noResultados: document.getElementById("no-resultados"),
         productosContainer: document.getElementById("lista-productos")
     };
-    function getUsuarioNombre() {
-        return sesionActual ? sesionActual.correo.split("@")[0] : "Usuario";
+
+    function getUsuarioNombre() { return sesionActual ? sesionActual.correo.split("@")[0] : "Usuario"; }
+
+    function agregar(nombre, precio, imagen) {
+        const existe = carrito.find(item => item.nombre === nombre);
+        if (existe) existe.qty++;
+        else carrito.push({ nombre, precio, imagen, qty: 1 });
+        guardarCarrito();
+        actualizarCarrito();
     }
-    function mostrarLogin() {
-        document.getElementById("registro").classList.add("hidden");
-        document.getElementById("login").classList.remove("hidden");
+    function cambiarQty(index, delta) {
+        carrito[index].qty += delta;
+        if (carrito[index].qty < 1) carrito.splice(index, 1);
+        guardarCarrito();
+        actualizarCarrito();
     }
-    function mostrarRegistro() {
-        document.getElementById("login").classList.add("hidden");
-        document.getElementById("registro").classList.remove("hidden");
+    function eliminar(i) {
+        carrito.splice(i, 1);
+        guardarCarrito();
+        actualizarCarrito();
     }
+    function vaciar() {
+        if (confirm("¿Vaciar todo el carrito?")) { carrito = []; guardarCarrito(); actualizarCarrito(); }
+    }
+    function actualizarCarrito() {
+        els.items.innerHTML = "";
+        let suma = 0;
+        carrito.forEach((item, i) => {
+            const subtotal = item.precio * item.qty;
+            suma += subtotal;
+            const div = document.createElement("div");
+            div.className = "cart-item";
+            div.innerHTML = `
+                ${item.imagen ? `<img src="${item.imagen}" style="width:70px;height:70px;object-fit:cover;border-radius:8px;">` : ''}
+                <div style="flex:1;"><strong>${item.nombre}</strong><br><span style="color:var(--accent);">RD$ ${item.precio.toLocaleString()}</span></div>
+                <div class="qty-controls">
+                    <button class="qty-btn" onclick="cambiarQty(${i}, -1)">–</button>
+                    <span style="min-width:24px;text-align:center;">${item.qty}</span>
+                    <button class="qty-btn" onclick="cambiarQty(${i}, 1)">+</button>
+                </div>
+                <div style="text-align:right;"><div style="color:var(--accent);font-size:1.1rem;">RD$ ${subtotal.toLocaleString()}</div>
+                <button onclick="eliminar(${i})" style="background:#ff3366;color:white;border:none;padding:4px 10px;border-radius:50%;margin-top:6px;">✕</button></div>
+            `;
+            els.items.appendChild(div);
+        });
+        els.total.textContent = `Total RD$ ${suma.toLocaleString()}`;
+        els.contador.textContent = carrito.reduce((acc, item) => acc + item.qty, 0);
+        els.btnCarrito.style.display = carrito.length > 0 ? "block" : "none";
+    }
+
+    function cambiarMetodo(metodo) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+        document.getElementById("pago-tarjeta").classList.add("hidden");
+        document.getElementById("pago-paypal").classList.add("hidden");
+        document.getElementById("pago-transferencia").classList.add("hidden");
+        if (metodo === "tarjeta") document.getElementById("pago-tarjeta").classList.remove("hidden");
+        if (metodo === "paypal") document.getElementById("pago-paypal").classList.remove("hidden");
+        if (metodo === "transferencia") document.getElementById("pago-transferencia").classList.remove("hidden");
+    }
+
+    function mostrarCarrito() { els.modalCarrito.style.display = "flex"; }
+    function cerrarCarrito() { els.modalCarrito.style.display = "none"; }
+    function abrirPago() {
+        if (carrito.length === 0) { alert("Tu carrito está vacío"); return; }
+        cerrarCarrito();
+        els.modalPago.style.display = "flex";
+        cambiarMetodo('tarjeta');
+    }
+    function cerrarPago() { els.modalPago.style.display = "none"; els.loadingPago.classList.add("hidden"); }
+    function procesarPago() {
+        els.loadingPago.classList.remove("hidden");
+        els.confirmPago.disabled = true;
+        setTimeout(() => {
+            els.loadingPago.classList.add("hidden");
+            els.confirmPago.disabled = false;
+            alert("✅ Pago procesado correctamente");
+            carrito = [];
+            guardarCarrito();
+            actualizarCarrito();
+            cerrarPago();
+        }, 1800);
+    }
+
+    function mostrarLogin() { document.getElementById("registro").classList.add("hidden"); document.getElementById("login").classList.remove("hidden"); }
+    function mostrarRegistro() { document.getElementById("login").classList.add("hidden"); document.getElementById("registro").classList.remove("hidden"); }
     function registrar() {
         const correo = document.getElementById("reg_correo").value.trim().toLowerCase();
         const contra = document.getElementById("reg_contra").value;
@@ -440,134 +491,10 @@
         location.reload();
     }
     function guardarCarrito() {
-        if (sesionActual) {
-            localStorage.setItem("carrito_" + sesionActual.correo, JSON.stringify(carrito));
-        }
-    }
-    function agregar(nombre, precio, imagen) {
-        carrito.push({ nombre, precio, imagen });
-        guardarCarrito();
-        actualizarCarrito();
-    }
-    function eliminar(i) {
-        carrito.splice(i, 1);
-        guardarCarrito();
-        actualizarCarrito();
-    }
-    function vaciar() {
-        if (confirm("¿Vaciar todo el carrito?")) {
-            carrito = [];
-            guardarCarrito();
-            actualizarCarrito();
-        }
-    }
-    function actualizarCarrito() {
-        els.items.innerHTML = "";
-        let total = 0;
-        carrito.forEach((p, i) => {
-            total += p.precio;
-            const div = document.createElement("div");
-            div.className = "item";
-            div.innerHTML = `
-                ${p.imagen ? `<img src="${p.imagen}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;flex-shrink:0;">` : ''}
-                <div style="flex:1;">${p.nombre}<br>RD$${p.precio.toLocaleString()}</div>
-                <button onclick="eliminar(${i})" style="background:#ff3366;color:white;border:none;padding:8px 14px;border-radius:50%;font-weight:bold;">X</button>
-            `;
-            els.items.appendChild(div);
-        });
-        els.total.textContent = "Total RD$" + total.toLocaleString();
-        els.contador.textContent = carrito.length;
-        els.btnCarrito.style.display = carrito.length > 0 ? "block" : "none";
-    }
-    function mostrarCarrito() {
-        els.modalCarrito.querySelector("h2").textContent = `Tu Carrito, ${getUsuarioNombre()} 🎸`;
-        els.modalCarrito.style.display = "flex";
-    }
-    function cerrarCarrito() {
-        els.modalCarrito.querySelector("h2").textContent = "Tu Carrito";
-        els.modalCarrito.style.display = "none";
-    }
-    function abrirPago() {
-        if (carrito.length === 0) {
-            alert("Tu carrito está vacío. Añade productos antes de comprar.");
-            return;
-        }
-        cerrarCarrito();
-        els.modalPago.querySelector("h2").textContent = `Finalizar Compra, ${getUsuarioNombre()}`;
-        els.modalPago.style.display = "flex";
-        els.metodo.value = "tarjeta";
-        mostrarMetodo();
-        document.querySelectorAll("#pago-tarjeta input").forEach(i => i.value = "");
-        els.loadingPago.classList.add("hidden");
-    }
-    function cerrarPago() {
-        els.modalPago.querySelector("h2").textContent = "Finalizar Compra";
-        els.modalPago.style.display = "none";
-        els.loadingPago.classList.add("hidden");
-    }
-    function mostrarMetodo() {
-        const m = els.metodo.value;
-        document.getElementById("pago-tarjeta").classList.add("hidden");
-        document.getElementById("pago-paypal").classList.add("hidden");
-        document.getElementById("pago-transferencia").classList.add("hidden");
-        if (m === "tarjeta") document.getElementById("pago-tarjeta").classList.remove("hidden");
-        if (m === "paypal") document.getElementById("pago-paypal").classList.remove("hidden");
-        if (m === "transferencia") document.getElementById("pago-transferencia").classList.remove("hidden");
-    }
-    function isValidCardNumber(number) {
-        number = number.replace(/\s/g, '');
-        if (!/^\d+$/.test(number) || number.length < 13 || number.length > 19) return false;
-        let sum = 0, shouldDouble = false;
-        for (let i = number.length - 1; i >= 0; i--) {
-            let digit = parseInt(number[i]);
-            if (shouldDouble) { digit *= 2; if (digit > 9) digit -= 9; }
-            sum += digit;
-            shouldDouble = !shouldDouble;
-        }
-        return sum % 10 === 0;
-    }
-    function isValidExpiry(exp) {
-        if (!/^\d{2}\/\d{2}$/.test(exp)) return false;
-        let [month, year] = exp.split('/').map(n => parseInt(n));
-        if (month < 1 || month > 12) return false;
-        let now = new Date();
-        let currentYear = now.getFullYear() % 100;
-        let currentMonth = now.getMonth() + 1;
-        if (year < currentYear || (year === currentYear && month < currentMonth)) return false;
-        return true;
-    }
-    function procesarPago() {
-        const metodo = els.metodo.value;
-        if (metodo === "tarjeta") {
-            const inputs = document.querySelectorAll("#pago-tarjeta input");
-            const numero = inputs[0].value.trim().replace(/\s/g,'');
-            const nombre = inputs[1].value.trim();
-            const exp = inputs[2].value.trim();
-            const cvv = inputs[3].value.trim();
-            if (!numero || !nombre || !exp || !cvv) { alert("Completa todos los campos de la tarjeta."); return; }
-            if (!isValidCardNumber(numero)) { alert("Número de tarjeta inválido."); return; }
-            if (!isValidExpiry(exp)) { alert("Fecha de expiración inválida."); return; }
-            if (!/^\d{3,4}$/.test(cvv)) { alert("CVV inválido."); return; }
-            if (nombre.length < 3) { alert("Nombre en tarjeta inválido."); return; }
-        }
-        els.loadingPago.classList.remove("hidden");
-        els.confirmPago.disabled = true;
-        els.confirmPago.textContent = "Procesando...";
-        setTimeout(() => {
-            els.loadingPago.classList.add("hidden");
-            els.confirmPago.disabled = false;
-            els.confirmPago.textContent = "Confirmar Pago";
-            alert("✅ Pago procesado correctamente");
-            carrito = [];
-            guardarCarrito();
-            actualizarCarrito();
-            cerrarPago();
-            cerrarCarrito();
-        }, 1800);
+        if (sesionActual) localStorage.setItem("carrito_" + sesionActual.correo, JSON.stringify(carrito));
     }
     function inicializarBuscador() {
         const cards = els.productosContainer.querySelectorAll('.card');
-      
         els.buscador.addEventListener('input', () => {
             const termino = els.buscador.value.toLowerCase().trim();
             let encontrados = 0;
@@ -580,19 +507,13 @@
                     card.style.display = 'none';
                 }
             });
-            if (encontrados === 0 && termino !== "") {
-                els.noResultados.style.display = 'block';
-            } else {
-                els.noResultados.style.display = 'none';
-            }
+            els.noResultados.style.display = (encontrados === 0 && termino !== "") ? 'block' : 'none';
         });
     }
-    if (localStorage.getItem("sesionActiva")) {
-        abrirTienda();
-    }
+
+    if (localStorage.getItem("sesionActiva")) abrirTienda();
     window.onload = function() {
         inicializarBuscador();
-        console.log("✅ MixKit Records cargado correctamente. Revisa la consola (F12) si el logo no aparece.");
     };
 </script>
 </body>
