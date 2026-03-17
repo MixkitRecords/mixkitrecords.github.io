@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>MixKit Records</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0015;
+            --primary: #ff3366;
+            --dark: #1a0033;
+            --text: #fff;
+            --accent: #ffcc00
+        }
+        
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            line-height: 1.5
+        }
+        
+        .hidden {
+            display: none !important
+        }
+        
+        .container {
+            max-width: 420px;
+            width: 90%;
+            margin: 100px auto;
+            background: rgba(26, 26, 34, .95);
+            border: 1px solid rgba(255, 255, 255, .08);
+            border-radius: 28px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, .4);
+            backdrop-filter: blur(20px)
+        }
+        
+        input {
+            width: 100%;
+            padding: 18px 20px;
+            margin: 12px 0;
+            background: rgba(40, 40, 50, .7);
+            border: 1px solid rgba(255, 255, 255, .12);
+            border-radius: 16px;
+            color: #fff;
+            font-size: 1.05rem;
+            transition: all .3s ease
+        }
+        
+        input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 51, 102, .25);
+            outline: none
+        }
+        
+        .loginbtn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--primary), #ff6699);
+            color: #fff;
+            border: none;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            letter-spacing: .3px;
+            margin-top: 10px;
+            transition: transform .2s ease, box-shadow .2s ease
+        }
+        
+        .loginbtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 51, 102, .35)
+        }
+        
+        #tienda {
+            display: none;
+            background: var(--bg);
+            min-height: 100vh
+        }
+        
+        header {
+            position: sticky;
+            top: 0;
+            backdrop-filter: blur(30px);
+            background: rgba(10, 0, 20, .85);
+            border-bottom: 1px solid rgba(255, 255, 255, .06);
+            z-index: 100;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap
+        }
+        
+        .logo-header {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            border: 2.5px solid var(--primary);
+            background: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+            color: var(--accent);
+            box-shadow: 0 0 15px rgba(255, 51, 102, .3);
+            transition: all .3s ease
+        }
+        
+        .logo-header:hover {
+            transform: scale(1.08)
+        }
+        
+        .titulo-header h1 {
+            font-size: 2.8rem;
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: -1.2px;
+            color: var(--primary)
+        }
+        
+        .subtitle {
+            font-size: 1.15rem;
+            color: #aaa;
+            margin-top: 2px
+        }
+        
+        .buscador-container {
+            position: relative;
+            max-width: 420px;
+            width: 100%;
+            margin-top: 12px
+        }
+        
+        #buscador {
+            width: 100%;
+            padding: 16px 50px 16px 22px;
+            background: rgba(255, 255, 255, .07);
+            border: 1px solid rgba(255, 255, 255, .1);
+            border-radius: 9999px;
+            color: #fff;
+            font-size: 1.05rem;
+            backdrop-filter: blur(15px)
+        }
+        
+        #buscador:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(255, 51, 102, .2)
+        }
+        
+        .icono-buscador {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: #ccc
+        }
+        
+        main {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 40px 20px 100px
+        }
+        
+        .welcome {
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid rgba(255, 255, 255, .08);
+            border-radius: 24px;
+            padding: 28px;
+            text-align: center;
+            margin-bottom: 50px;
+            backdrop-filter: blur(12px);
+            position: relative
+        }
+        
+        .logout-btn {
+            position: absolute;
+            top: 18px;
+            right: 24px;
+            background: rgba(255, 255, 255, .08);
+            color: #ddd;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 9999px;
+            font-size: .95rem;
+            transition: all .3s
+        }
+        
+        .logout-btn:hover {
+            background: var(--primary);
+            color: #fff
+        }
+        
+        .productos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            justify-content: center
+        }
+        
+        .card {
+            width: 280px;
+            background: rgba(255, 255, 255, .05);
+            border: 1px solid rgba(255, 255, 255, .07);
+            border-radius: 28px;
+            overflow: hidden;
+            transition: all .4s cubic-bezier(.4, 0, .2, 1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .3)
+        }
+        
+        .card:hover {
+            transform: translateY(-12px);
+            border-color: var(--primary);
+            box-shadow: 0 25px 50px rgba(255, 51, 102, .25)
+        }
+        
+        .card img {
+            width: 100%;
+            height: 210px;
+            object-fit: cover;
+            transition: transform .5s ease;
+            cursor: pointer;
+            display: block
+        }
+        
+        .card:hover img {
+            transform: scale(1.07)
+        }
+        
+        .card-body {
+            padding: 24px;
+            text-align: center
+        }
+        
+        .card-body h4 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin: 0 0 8px
+        }
+        
+        .precio {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin: 12px 0 20px
+        }
+        
+        .buybtn {
+            background: #fff;
+            color: #111;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 9999px;
+            font-weight: 600;
+            width: 100%;
+            transition: all .3s ease
+        }
+        
+        .buybtn:hover {
+            background: var(--accent);
+            transform: scale(1.03)
+        }
+        
+        #btn-carrito {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #fff;
+            color: #111;
+            padding: 14px 28px;
+            border-radius: 9999px;
+            font-weight: 700;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .4);
+            display: none;
+            z-index: 999;
+            transition: transform .3s
+        }
+        
+        #btn-carrito:hover {
+            transform: scale(1.08)
+        }
+        
+        #modal-carrito,
+        #modal-pago,
+        #modal-descripcion {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .9);
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            backdrop-filter: blur(20px)
+        }
+        
+        .modal-box {
+            background: rgba(26, 26, 34, .98);
+            border: 1px solid rgba(255, 255, 255, .08);
+            border-radius: 28px;
+            width: 92%;
+            max-width: 560px;
+            padding: 32px;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, .6);
+            position: relative
+        }
+        
+        .modal-box h2 {
+            text-align: center;
+            font-size: 1.65rem;
+            margin-bottom: 24px;
+            color: var(--primary)
+        }
+        
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: rgba(255, 255, 255, .04);
+            padding: 16px;
+            border-radius: 20px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255, 255, 255, .06)
+        }
+        
+        .qty-btn {
+            width: 34px;
+            height: 34px;
+            background: rgba(255, 255, 255, .1);
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all .2s
+        }
+        
+        .qty-btn:hover {
+            background: var(--primary)
+        }
+        
+        .cart-total {
+            font-size: 1.85rem;
+            color: var(--accent);
+            text-align: right;
+            margin: 20px 0;
+            font-weight: 700
+        }
+        
+        .payment-tabs {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap
+        }
+        
+        .tab-btn {
+            padding: 12px 26px;
+            background: rgba(255, 255, 255, .08);
+            border: 1px solid rgba(255, 255, 255, .1);
+            border-radius: 9999px;
+            color: #ccc;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all .3s
+        }
+        
+        .tab-btn.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary)
+        }
+        
+        .payment-form {
+            background: rgba(255, 255, 255, .05);
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, .08)
+        }
+        
+        .modal-btn {
+            padding: 16px 32px;
+            border-radius: 9999px;
+            font-weight: 600;
+            margin: 6px;
+            cursor: pointer;
+            transition: all .3s
+        }
+        
+        .modal-btn.primary {
+            background: var(--primary);
+            color: #fff
+        }
+        
+        .modal-btn.secondary {
+            background: rgba(255, 255, 255, .08);
+            color: #ddd
+        }
+        
+        .modal-btn:hover {
+            transform: scale(1.04)
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+        
+        @media (max-width:768px) {
+            .container {
+                margin: 60px auto;
+                padding: 30px 20px
+            }
+            
+            header {
+                padding: 15px 10px
+            }
+            
+            .titulo-header h1 {
+                font-size: 2.4rem
+            }
+            
+            .card {
+                width: 100%;
+                max-width: 340px
+            }
+            
+            .productos {
+                gap: 24px
+            }
+            
+            main {
+                padding: 30px 10px 80px
+            }
+            
+            #btn-carrito {
+                bottom: 20px;
+                right: 20px;
+                padding: 12px 24px;
+                font-size: .95rem
+            }
+        }
+        
+        @media (max-width:480px) {
+            .titulo-header h1 {
+                font-size: 2.1rem
+            }
+            
+            .modal-box {
+                padding: 24px 20px
+            }
+            
+            .card-body {
+                padding: 20px
+            }
+        }
+        
+        @media (max-width:360px) {
+            .titulo-header h1 {
+                font-size: 1.95rem
+            }
+        }
+    </style>
+</head>
+<script>
+// Asegurar que el carrito se inicialice correctamente al cargar
+document.addEventListener("DOMContentLoaded", function () {
+
+    // Si hay sesión activa, carga carrito y actualiza
+    const sesion = localStorage.getItem("sesionActiva");
+
+    if (sesion) {
+        const user = JSON.parse(sesion);
+        const data = localStorage.getItem("carrito_" + user.correo);
+
+        if (data) {
+            carrito = JSON.parse(data);
+        }
+
+        actualizarCarrito();
+    }
+
+});
+</script>
+<body>
+    <div id="loginArea">
+        <div class="container">
+            <h1 style="text-align:center;color:#ff3366;margin-bottom:8px">MixKit Records</h1>
+            <p class="subtitle" style="text-align:center;margin-bottom:30px">Inicia sesión o regístrate</p>
+            <div id="login">
+                <h2 style="text-align:center;margin-bottom:24px">Iniciar Sesión</h2>
+                <form onsubmit="return iniciarSesion()">
+                    <input type="email" id="login_correo" placeholder="Correo electrónico" required>
+                    <input type="password" id="login_contra" placeholder="Contraseña" required>
+                    <button class="loginbtn">Entrar</button>
+                </form>
+                <div style="text-align:center;margin-top:20px;font-size:.95rem">¿No tienes cuenta? <a href="#" onclick="mostrarRegistro()" style="color:var(--primary)">Regístrate</a></div>
+            </div>
+            <div id="registro" class="hidden">
+                <h2 style="text-align:center;margin-bottom:24px">Crear Cuenta</h2>
+                <form onsubmit="return registrar()">
+                    <input type="email" id="reg_correo" placeholder="Correo electrónico" required>
+                    <input type="password" id="reg_contra" placeholder="Contraseña (mín 6)" required>
+                    <button class="loginbtn">Registrarme</button>
+                </form>
+                <div style="text-align:center;margin-top:20px;font-size:.95rem"><a href="#" onclick="mostrarLogin()" style="color:var(--primary)">Volver a iniciar sesión</a></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="tienda">
+        <header>
+            <div class="logo-header">🎸</div>
+            <div class="titulo-header">
+                <h1>MixKit Records</h1>
+                <div class="subtitle">Instrumentos Musicales</div>
+            </div>
+            <div class="buscador-container">
+                <input type="text" id="buscador" placeholder="🔍 Buscar instrumentos...">
+                <span class="icono-buscador">🔎</span>
+            </div>
+        </header>
+        <main>
+            <div class="welcome">
+                <button class="logout-btn" onclick="cerrarSesion()">Cerrar sesión</button>
+                <h2>Bienvenido <span id="usuario"></span> 🎸</h2>
+            </div>
+            <div class="productos" id="lista-productos">
+                <div class="card">
+                    <img src="Guitarra elec.jpg" alt="Guitarra Eléctrica" loading="lazy">
+                    <div class="card-body">
+                        <h4>Guitarra Eléctrica</h4>
+                        <div class="precio">RD$ 12,500</div>
+                        <button class="buybtn" onclick="agregar('Guitarra Eléctrica',12500,'Guitarra elec.jpg')">Añadir al carrito</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="Bateria.jpg" alt="Batería Acústica" loading="lazy">
+                    <div class="card-body">
+                        <h4>Batería Acústica</h4>
+                        <div class="precio">RD$ 18,900</div>
+                        <button class="buybtn" onclick="agregar('Batería Acústica',18900,'Bateria.jpg')">Añadir al carrito</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="Teclado 61.jpg" alt="Teclado 61 teclas" loading="lazy">
+                    <div class="card-body">
+                        <h4>Teclado 61 teclas</h4>
+                        <div class="precio">RD$ 9,800</div>
+                        <button class="buybtn" onclick="agregar('Teclado 61 teclas',9800,'Teclado 61.jpg')">Añadir al carrito</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="Flauta.jpg" alt="Flauta Transversal Profesional" loading="lazy">
+                    <div class="card-body">
+                        <h4>Flauta Transversal Profesional</h4>
+                        <div class="precio">RD$ 7,500</div>
+                        <button class="buybtn" onclick="agregar('Flauta Transversal Profesional',7500,'Flauta.jpg')">Añadir al carrito</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="Guitarra acus.jpg" alt="Guitarra Acústica" loading="lazy">
+                    <div class="card-body">
+                        <h4>Guitarra Acústica</h4>
+                        <div class="precio">RD$ 8,200</div>
+                        <button class="buybtn" onclick="agregar('Guitarra Acústica',8200,'Guitarra acus.jpg')">Añadir al carrito</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="Violin.jpg" alt="Violín Profesional" loading="lazy">
+                    <div class="card-body">
+                        <h4>Violín Profesional</h4>
+                        <div class="precio">RD$ 9,500</div>
+                        <button class="buybtn" onclick="agregar('Violín Profesional',9500,'Violin.jpg')">Añadir al carrito</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="Sax.jpg" alt="Saxofón Alto" loading="lazy">
+                    <div class="card-body">
+                        <h4>Saxofón Alto</h4>
+                        <div class="precio">RD$ 14,500</div>
+                        <button class="buybtn" onclick="agregar('Saxofón Alto',14500,'Sax.jpg')">Añadir al carrito</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="Piano dig.jpg" alt="Piano Digital" loading="lazy">
+                    <div class="card-body">
+                        <h4>Piano Digital</h4>
+                        <div class="precio">RD$ 22,000</div>
+                        <button class="buybtn" onclick="agregar('Piano Digital',22000,'Piano dig.jpg')">Añadir al carrito</button>
+                    </div>
+                </div>
+            </div>
+            <div id="no-resultados" style="display:none;text-align:center;padding:80px 20px;color:#ff9999;font-size:1.4rem">No se encontraron productos 😔</div>
+        </main>
+        <button id="btn-carrito" onclick="mostrarCarrito()">🛒 Carrito (<span id="contador">0</span>)</button>
+        
+        <!-- Modales -->
+        <div id="modal-carrito">
+            <div class="modal-box">
+                <h2>Tu Carrito</h2>
+                <div id="items"></div>
+                <div class="cart-total" id="total">Total RD$ 0</div>
+                <div style="text-align:center;margin-top:20px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+                    <button onclick="vaciar()" class="modal-btn secondary">Vaciar</button>
+                    <button onclick="abrirPago()" class="modal-btn primary">Pagar ahora</button>
+                    <button onclick="cerrarCarrito()" class="modal-btn secondary">Cerrar</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="modal-pago">
+            <div class="modal-box">
+                <h2>Finalizar Compra</h2>
+                <div class="payment-tabs">
+                    <button class="tab-btn active" onclick="cambiarMetodo('tarjeta')">💳 Tarjeta</button>
+                    <button class="tab-btn" onclick="cambiarMetodo('paypal')">🐧 PayPal</button>
+                    <button class="tab-btn" onclick="cambiarMetodo('transferencia')">🏦 Transferencia</button>
+                </div>
+                <div id="pago-tarjeta" class="payment-form">
+                    <input type="text" id="card-number" placeholder="Número de tarjeta" maxlength="19">
+                    <input type="text" id="card-name" placeholder="Nombre en la tarjeta">
+                    <div style="display:flex;gap:10px">
+                        <input type="text" id="card-exp" placeholder="MM/AA" maxlength="5">
+                        <input type="text" id="card-cvv" placeholder="CVV" maxlength="4">
+                    </div>
+                </div>
+                <div id="pago-paypal" class="payment-form hidden">Redirigiendo a PayPal...</div>
+                <div id="pago-transferencia" class="payment-form hidden">
+                    <p style="text-align:center">Banco Popular<br>Cuenta: 123-456-7890<br><strong>Envía comprobante por WhatsApp</strong></p>
+                </div>
+                <div id="loading-pago" class="hidden" style="text-align:center;margin:20px 0">
+                    <div style="font-size:2.8rem;animation:spin 1.2s linear infinite;margin-bottom:10px">🔄</div>
+                    <p style="color:var(--primary)">Procesando pago...</p>
+                </div>
+                <div style="text-align:center">
+                    <button id="confirm-pago" onclick="procesarPago()" class="modal-btn primary">Pagar Ahora</button>
+                    <button onclick="cerrarPago()" class="modal-btn secondary">Cancelar</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="modal-descripcion">
+            <div class="modal-box">
+                <button onclick="cerrarDescripcion()" style="position:absolute;top:20px;right:20px;background:none;border:none;color:#aaa;font-size:2rem;cursor:pointer;line-height:1">✕</button>
+                <h2 id="desc-nombre" style="margin-bottom:15px"></h2>
+                <img id="desc-imagen" style="width:100%;height:280px;object-fit:cover;border-radius:20px;margin-bottom:25px;box-shadow:0 10px 30px rgba(0,0,0,.3)" loading="lazy">
+                <p id="desc-texto" style="font-size:1.05rem;line-height:1.65;color:#ddd;text-align:justify;margin-bottom:25px"></p>
+                <div style="background:rgba(255,255,255,.06);padding:20px;border-radius:20px;border:1px solid rgba(255,255,255,.08)">
+                    <strong style="color:var(--accent);font-size:1.1rem">🎁 Lo que ofrecemos:</strong>
+                    <p id="desc-oferta" style="margin-top:12px;color:#ccc;line-height:1.6"></p>
+                </div>
+                <div style="text-align:center;margin-top:30px;display:flex;gap:15px;justify-content:center;flex-wrap:wrap">
+                    <button onclick="cerrarDescripcion()" class="modal-btn secondary">Cerrar</button>
+                    <button onclick="agregarDesdeDescripcion()" class="modal-btn primary">Añadir al carrito</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let usuarios = JSON.parse(localStorage.getItem("usuariosMixKit")) || [],
+            carrito = [],
+            sesionActual = null,
+            productoActual = null;
+        
+        const els = {
+            loginArea: document.getElementById("loginArea"),
+            tienda: document.getElementById("tienda"),
+            usuario: document.getElementById("usuario"),
+            items: document.getElementById("items"),
+            total: document.getElementById("total"),
+            contador: document.getElementById("contador"),
+            btnCarrito: document.getElementById("btn-carrito"),
+            modalCarrito: document.getElementById("modal-carrito"),
+            modalPago: document.getElementById("modal-pago"),
+            loadingPago: document.getElementById("loading-pago"),
+            confirmPago: document.getElementById("confirm-pago"),
+            buscador: document.getElementById("buscador"),
+            noResultados: document.getElementById("no-resultados"),
+            productosContainer: document.getElementById("lista-productos")
+        };
+        
+        const productosInfo = {
+            "Guitarra Eléctrica": {
+                imagen: "Guitarra elec.jpg",
+                precio: 12500,
+                texto: "Guitarra eléctrica profesional con cuerpo de álamo y mástil de arce. Pastillas humbucker para sonido potente y versátil. Ideal para rock, metal y blues.",
+                oferta: "✅ Incluye: cable de instrumento, correa ajustable, set de púas y afinador digital.<br>✅ Garantía de 2 años y envío gratuito en todo el país."
+            },
+            "Batería Acústica": {
+                imagen: "Bateria.jpg",
+                precio: 18900,
+                texto: "Batería acústica completa de 5 piezas con platillos de bronce. Construcción en madera de arce para un sonido potente y resonante.",
+                oferta: "✅ Incluye: baquetas profesionales, atriles completos y fundas protectoras.<br>✅ Garantía de 1 año y montaje gratuito en tienda."
+            },
+            "Teclado 61 teclas": {
+                imagen: "Teclado 61.jpg",
+                precio: 9800,
+                texto: "Teclado electrónico profesional de 61 teclas sensibles al tacto con 200 sonidos y ritmos integrados. Ideal para principiantes y músicos caseros.",
+                oferta: "✅ Incluye: adaptador de corriente, pedal sustain y soporte para teclado.<br>✅ Garantía de 2 años."
+            },
+            "Flauta Transversal Profesional": {
+                imagen: "Flauta.jpg",
+                precio: 7500,
+                texto: "Flauta transversal profesional en aleación niquelada con mecanismo preciso. Sonido brillante y excelente proyección para solistas y orquestas.",
+                oferta: "✅ Incluye: estuche rígido, paño de limpieza y lubricante especial.<br>✅ Garantía de 3 años."
+            },
+            "Guitarra Acústica": {
+                imagen: "Guitarra acus.jpg",
+                precio: 8200,
+                texto: "Guitarra acústica con tapa de abeto y cuerpo de caoba. Proyección natural y tono cálido perfecto para folk, country y acompañamiento vocal.",
+                oferta: "✅ Incluye: correa de guitarra, capotraste y afinador clip-on.<br>✅ Garantía de 2 años y envío gratis."
+            },
+            "Violín Profesional": {
+                imagen: "Violin.jpg",
+                precio: 9500,
+                texto: "Violín profesional de madera de arce y abeto con acabado brillante. Arco de fibra de carbono y cuerdas de alta calidad para un tono rico y expresivo.",
+                oferta: "✅ Incluye: arco profesional, resina y estuche rígido.<br>✅ Garantía de 2 años."
+            },
+            "Saxofón Alto": {
+                imagen: "Sax.jpg",
+                precio: 14500,
+                texto: "Saxofón alto en latón dorado con llaves de precisión ergonómica. Sonido cálido y potente ideal para jazz, blues y música latina.",
+                oferta: "✅ Incluye: boquilla, cañas de repuesto y estuche protector.<br>✅ Garantía de 1 año."
+            },
+            "Piano Digital": {
+                imagen: "Piano dig.jpg",
+                precio: 22000,
+                texto: "Piano digital de 88 teclas con acción hammer y sonidos realistas de piano de cola. Efectos, ritmos y conectividad Bluetooth/MIDI.",
+                oferta: "✅ Incluye: pedal triple, soporte ajustable y auriculares profesionales.<br>✅ Garantía de 3 años."
+            }
+        };
+        
+        function actualizarCarrito() {
+            els.items.innerHTML = "";
+            let suma = 0;
+            carrito.forEach((item, i) => {
+                const subtotal = item.precio * item.qty;
+                suma += subtotal;
+                const div = document.createElement("div");
+                div.className = "cart-item";
+                div.innerHTML = `
+                    ${item.imagen ? `<img src="${item.imagen}" style="width:70px;height:70px;object-fit:cover;border-radius:12px;" loading="lazy">` : ""}
+                    <div style="flex:1">
+                        <strong>${item.nombre}</strong><br>
+                        <span style="color:var(--accent);font-size:0.95rem">RD$ ${item.precio.toLocaleString()}</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:8px">
+                        <button class="qty-btn" onclick="cambiarQty(${i},-1)">–</button>
+                        <span style="min-width:28px;text-align:center;font-weight:500">${item.qty}</span>
+                        <button class="qty-btn" onclick="cambiarQty(${i},1)">+</button>
+                    </div>
+                    <div style="text-align:right;margin-left:auto">
+                        <div style="color:var(--accent);font-weight:700">RD$ ${subtotal.toLocaleString()}</div>
+                        <button onclick="eliminar(${i})" style="background:#ff3366;color:white;border:none;padding:4px 10px;border-radius:50%;margin-top:8px;font-size:0.9rem">✕</button>
+                    </div>
+                `;
+                els.items.appendChild(div);
+            });
+            els.total.textContent = `Total RD$ ${suma.toLocaleString()}`;
+            const totalItems = carrito.reduce((acc, item) => acc + item.qty, 0);
+            els.contador.textContent = totalItems;
+            
+            // Líneas añadidas: esto hace que el botón flotante aparezca/desaparezca correctamente
+            els.btnCarrito.style.display = totalItems > 0 ? "block" : "none";
+        }
+        
+        function agregar(nombre, precio, imagen) {
+            const existe = carrito.find(item => item.nombre === nombre);
+            if (existe) existe.qty++;
+            else carrito.push({ nombre, precio, imagen, qty: 1 });
+            guardarCarrito();
+            actualizarCarrito(); // Línea añadida: ahora sí se actualiza la vista
+        }
+        
+        function mostrarDescripcion(nombre) {
+            const info = productosInfo[nombre];
+            if (!info) return alert("Descripción no disponible por el momento.");
+            productoActual = { nombre, precio: info.precio, imagen: info.imagen };
+            document.getElementById("desc-nombre").textContent = nombre;
+            document.getElementById("desc-imagen").src = info.imagen;
+            document.getElementById("desc-texto").textContent = info.texto;
+            document.getElementById("desc-oferta").innerHTML = info.oferta;
+            document.getElementById("modal-descripcion").style.display = "flex";
+        }
+        
+        function cerrarDescripcion() {
+            document.getElementById("modal-descripcion").style.display = "none";
+        }
+        
+        function agregarDesdeDescripcion() {
+            if (productoActual) {
+                agregar(productoActual.nombre, productoActual.precio, productoActual.imagen);
+                cerrarDescripcion();
+            }
+        }
+        
+        function inicializarDescripcion() {
+            document.querySelectorAll(".card").forEach(card => {
+                const img = card.querySelector("img");
+                if (img) {
+                    const nombre = card.querySelector("h4").textContent.trim();
+                    img.addEventListener("click", e => {
+                        e.stopImmediatePropagation();
+                        mostrarDescripcion(nombre);
+                    });
+                }
+            });
+        }
+        
+        function cambiarQty(index, delta) {
+            carrito[index].qty += delta;
+            if (carrito[index].qty < 1) carrito.splice(index, 1);
+            guardarCarrito();
+            actualizarCarrito(); // Línea añadida
+        }
+        
+        function eliminar(i) {
+            carrito.splice(i, 1);
+            guardarCarrito();
+            actualizarCarrito(); // Línea añadida
+        }
+        
+        function vaciar() {
+            if (confirm("¿Vaciar todo el carrito?")) {
+                carrito = [];
+                guardarCarrito();
+                actualizarCarrito(); // Línea añadida
+            }
+        }
+        
+        function cambiarMetodo(metodo) {
+            document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+            event.currentTarget.classList.add("active");
+            ["pago-tarjeta", "pago-paypal", "pago-transferencia"].forEach(id => {
+                document.getElementById(id).classList.add("hidden");
+            });
+            document.getElementById("pago-" + metodo).classList.remove("hidden");
+        }
+        
+        function mostrarCarrito() {
+            actualizarCarrito(); // Línea añadida: asegura que se vea actualizado
+            els.modalCarrito.style.display = "flex";
+        }
+        
+        function cerrarCarrito() {
+            els.modalCarrito.style.display = "none";
+        }
+        
+        function abrirPago() {
+            if (carrito.length === 0) return alert("Carrito vacío");
+            cerrarCarrito();
+            els.modalPago.style.display = "flex";
+            cambiarMetodo("tarjeta");
+        }
+        
+        function cerrarPago() {
+            els.modalPago.style.display = "none";
+            els.loadingPago.classList.add("hidden");
+        }
+        
+        function procesarPago() {
+            els.loadingPago.classList.remove("hidden");
+            els.confirmPago.disabled = true;
+            setTimeout(() => {
+                els.loadingPago.classList.add("hidden");
+                els.confirmPago.disabled = false;
+                alert("✅ ¡Pago procesado correctamente!");
+                carrito = [];
+                guardarCarrito();
+                actualizarCarrito(); // Línea añadida: oculta el botón después de pagar
+                cerrarPago();
+            }, 1600);
+        }
+        
+        function mostrarLogin() {
+            document.getElementById("registro").classList.add("hidden");
+            document.getElementById("login").classList.remove("hidden");
+        }
+        
+        function mostrarRegistro() {
+            document.getElementById("login").classList.add("hidden");
+            document.getElementById("registro").classList.remove("hidden");
+        }
+        
+        function registrar() {
+            const correo = document.getElementById("reg_correo").value.trim().toLowerCase(),
+                  contra = document.getElementById("reg_contra").value;
+            if (contra.length < 6) return alert("Contraseña mínimo 6 caracteres");
+            if (usuarios.some(u => u.correo === correo)) return alert("Correo ya registrado");
+            usuarios.push({ correo, contra });
+            localStorage.setItem("usuariosMixKit", JSON.stringify(usuarios));
+            alert("Cuenta creada");
+            mostrarLogin();
+            return false;
+        }
+        
+        function iniciarSesion() {
+            const correo = document.getElementById("login_correo").value.trim().toLowerCase(),
+                  contra = document.getElementById("login_contra").value;
+            const user = usuarios.find(u => u.correo === correo && u.contra === contra);
+            if (!user) return alert("Credenciales incorrectas");
+            localStorage.setItem("sesionActiva", JSON.stringify(user));
+            abrirTienda();
+            return false;
+        }
+        
+        function abrirTienda() {
+            sesionActual = JSON.parse(localStorage.getItem("sesionActiva"));
+            els.loginArea.style.display = "none";
+            els.tienda.style.display = "block";
+            els.usuario.textContent = sesionActual ? sesionActual.correo.split("@")[0] : "Usuario";
+            carrito = JSON.parse(localStorage.getItem("carrito_" + sesionActual.correo)) || [];
+            actualizarCarrito();  // Esta línea ya estaba y es correcta
+        }
+        
+        function cerrarSesion() {
+            localStorage.removeItem("sesionActiva");
+            if (sesionActual) localStorage.removeItem("carrito_" + sesionActual.correo);
+            location.reload();
+        }
+        
+        function guardarCarrito() {
+            if (sesionActual) localStorage.setItem("carrito_" + sesionActual.correo, JSON.stringify(carrito));
+        }
+        
+        function inicializarBuscador() {
+            const cards = els.productosContainer.querySelectorAll(".card");
+            els.buscador.addEventListener("input", () => {
+                const term = els.buscador.value.toLowerCase().trim();
+                let found = 0;
+                cards.forEach(card => {
+                    const name = card.querySelector("h4").textContent.toLowerCase();
+                    card.style.display = (name.includes(term) || term === "") ? "block" : "none";
+                    if (card.style.display === "block") found++;
+                });
+                els.noResultados.style.display = (found === 0 && term !== "") ? "block" : "none";
+            });
+        }
+        
+        if (localStorage.getItem("sesionActiva")) abrirTienda();
+        
+        window.onload = () => {
+            inicializarBuscador();
+            inicializarDescripcion();
+        };
+    </script>
+</body>
+</html>
