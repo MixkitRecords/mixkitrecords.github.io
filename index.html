@@ -105,7 +105,7 @@
             <form id="loginForm" class="space-y-6 bg-zinc-900 p-10 rounded-3xl border border-zinc-800 shadow-2xl">
                 <input type="text" id="nombre" placeholder="Nombre completo" required class="w-full px-6 py-4 bg-zinc-800 border border-zinc-700 rounded-2xl focus:border-[#d4af37] outline-none">
 
-                <input type="tel" id="telefono" placeholder="Teléfono / WhatsApp (ej: 8091234567)" required class="w-full px-6 py-4 bg-zinc-800 border border-zinc-700 rounded-2xl focus:border-[#d4af37] outline-none">
+                <input type="tel" id="telefono" placeholder="Teléfono / WhatsApp (ej: 8296320867)" required class="w-full px-6 py-4 bg-zinc-800 border border-zinc-700 rounded-2xl focus:border-[#d4af37] outline-none">
 
                 <select id="instrumento" required class="w-full px-6 py-4 bg-zinc-800 border border-zinc-700 rounded-2xl focus:border-[#d4af37]">
                     <option value="" disabled selected>¿Qué instrumento buscas?</option>
@@ -128,6 +128,7 @@
     </div>
 
     <div id="main-content" class="hidden">
+
         <nav class="bg-black/90 backdrop-blur-md border-b border-[#d4af37] fixed w-full z-50">
             <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
                 <div class="flex items-center gap-3">
@@ -141,7 +142,7 @@
                 <div class="hidden md:flex gap-8 text-sm font-medium">
                     <a href="#catalogo" class="hover:text-[#d4af37] transition">Catálogo</a>
                     <a href="#nosotros" class="hover:text-[#d4af37] transition">Nosotros</a>
-                    <a href="#registro" id="registro-link" class="hover:text-[#d4af37] transition">Regístrate / Inicia Sesión</a>
+                    <a href="javascript:void(0)" onclick="logout()" id="registro-link" class="hover:text-[#d4af37] transition">Cambiar usuario</a>
                     <a href="#contacto" class="hover:text-[#d4af37] transition">Contacto</a>
                 </div>
 
@@ -211,6 +212,15 @@
             </div>
         </section>
 
+        <section id="contacto" class="py-20 bg-black border-t border-zinc-800">
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <h2 class="text-4xl font-bold gold-text mb-6">Contacto</h2>
+                <p class="text-gray-300 text-lg mb-3">WhatsApp: +1 8296320867</p>
+                <p class="text-gray-400">La Vega, República Dominicana</p>
+                <p class="text-gray-500 mt-4">Pago seguro • Confirmación por WhatsApp • Envíos en RD</p>
+            </div>
+        </section>
+
         <footer class="bg-black py-12 border-t border-[#d4af37]">
             <div class="max-w-7xl mx-auto px-6 text-center">
                 <p class="text-[#d4af37] text-2xl font-bold mb-2">MIXKIT RECORDS</p>
@@ -242,7 +252,7 @@
                         </label>
                         <label class="flex items-center gap-3 bg-zinc-800 p-4 rounded-2xl cursor-pointer hover:bg-zinc-700 transition">
                             <input type="radio" name="payment" value="transferencia" class="w-5 h-5 accent-[#d4af37]">
-                            <span>Transferencia / Pago Móvil</span>
+                            <span>Transferencia / Pago por comprobante</span>
                         </label>
                         <label class="flex items-center gap-3 bg-zinc-800 p-4 rounded-2xl cursor-pointer hover:bg-zinc-700 transition">
                             <input type="radio" name="payment" value="efectivo" class="w-5 h-5 accent-[#d4af37]">
@@ -252,6 +262,17 @@
                             <input type="radio" name="payment" value="whatsapp" class="w-5 h-5 accent-[#d4af37]">
                             <span>Coordinar por WhatsApp</span>
                         </label>
+                    </div>
+
+                    <div id="bank-info" class="mt-6 p-5 bg-zinc-800 rounded-2xl border border-zinc-700 hidden">
+                        <h4 class="text-xl font-semibold gold-text mb-3">Datos para transferencia</h4>
+                        <p><strong>Banco:</strong> Banco Banreservas</p>
+                        <p><strong>Cuenta:</strong> 9609166249</p>
+                        <p><strong>Nombre:</strong> Daniel Molina</p>
+                        <p><strong>Tipo:</strong> Ahorros</p>
+                        <p class="text-sm text-gray-400 mt-3">
+                            Luego de pagar, envía tu comprobante por WhatsApp para confirmar tu pedido.
+                        </p>
                     </div>
                 </div>
 
@@ -286,8 +307,13 @@
         </div>
     </div>
 
+    <a href="https://wa.me/8296320867" target="_blank"
+       class="fixed bottom-6 right-6 bg-green-500 text-white w-16 h-16 rounded-full flex items-center justify-center text-3xl shadow-2xl z-50 hover:scale-110 transition">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
     <script>
-        const MI_NUMERO_WHATSAPP = "1809TU_NUMERO";
+        const WHATSAPP_NUMBER = '8296320867';
 
         const products = [
             { id: 1, name: "Batería", price: 18900, desc: "Batería acústica completa 5 piezas con platillos de calidad", img: "Bateria.jpg" },
@@ -314,21 +340,15 @@
         let cart = JSON.parse(localStorage.getItem('cart') || '[]');
         let currentProduct = null;
 
+        function formatDOP(value) {
+            return `RD$ ${value.toLocaleString('es-DO')}`;
+        }
+
         function showToast(message) {
             const toast = document.getElementById('toast');
             toast.textContent = message;
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3500);
-        }
-
-        function abrirWhatsApp(texto) {
-            const urlWhatsApp = `https://wa.me/${MI_NUMERO_WHATSAPP}?text=${encodeURIComponent(texto)}`;
-            window.open(urlWhatsApp, '_blank');
-        }
-
-        function obtenerMetodoPago() {
-            const selected = document.querySelector('input[name="payment"]:checked');
-            return selected ? selected.value : "No especificado";
         }
 
         function handleLogin() {
@@ -341,34 +361,25 @@
                 return;
             }
 
-            const userData = {
-                nombre,
-                telefono,
-                instrumento,
-                fecha: new Date().toLocaleString('es-DO')
-            };
+            if (!/^\d{10,13}$/.test(telefono)) {
+                showToast("Ingresa un teléfono válido");
+                return;
+            }
 
+            const userData = { nombre, telefono, instrumento, fecha: new Date().toLocaleString('es-DO') };
             localStorage.setItem('mixkit_user', JSON.stringify(userData));
             localStorage.setItem('isLoggedIn', 'true');
+
+            showToast(`¡Bienvenido ${nombre}! Te llevamos al catálogo 🎸`);
 
             document.getElementById('login-gate').style.display = 'none';
             document.getElementById('main-content').classList.remove('hidden');
             document.getElementById('user-name').textContent = nombre;
             document.getElementById('welcome-msg').innerHTML = `¡Hola, ${nombre}! Bienvenido a Mixkit Records 🎶`;
 
-            showToast(`¡Bienvenido ${nombre}!`);
-
-            const texto = `Nuevo ingreso en Mixkit Records
-
-Nombre: ${nombre}
-Teléfono: ${telefono}
-Instrumento de interés: ${instrumento}
-Fecha: ${userData.fecha}`;
-
             setTimeout(() => {
-                abrirWhatsApp(texto);
                 document.getElementById('catalogo').scrollIntoView({ behavior: 'smooth' });
-            }, 700);
+            }, 800);
         }
 
         function logout() {
@@ -390,8 +401,8 @@ Fecha: ${userData.fecha}`;
                     <div class="p-8">
                         <h3 class="text-2xl font-semibold mb-3">${p.name}</h3>
                         <p class="text-gray-400 mb-6">${p.desc}</p>
-                        <div class="flex justify-between items-end">
-                            <span class="text-3xl font-extrabold gold-text">RD$ ${p.price.toLocaleString()}</span>
+                        <div class="flex justify-between items-end gap-4">
+                            <span class="text-3xl font-extrabold gold-text">${formatDOP(p.price)}</span>
                             <button onclick="addToCart(${p.id}); event.stopPropagation()" class="bg-[#d4af37] text-black px-8 py-3 rounded-2xl font-bold hover:bg-white transition">
                                 Añadir
                             </button>
@@ -414,8 +425,8 @@ Fecha: ${userData.fecha}`;
                     <div class="p-8">
                         <h3 class="text-2xl font-semibold mb-3">${p.name}</h3>
                         <p class="text-gray-400 mb-6">${p.desc}</p>
-                        <div class="flex justify-between items-end">
-                            <span class="text-3xl font-extrabold gold-text">RD$ ${p.price.toLocaleString()}</span>
+                        <div class="flex justify-between items-end gap-4">
+                            <span class="text-3xl font-extrabold gold-text">${formatDOP(p.price)}</span>
                             <button onclick="addToCart(${p.id}); event.stopPropagation()" class="bg-[#d4af37] text-black px-8 py-3 rounded-2xl font-bold hover:bg-white transition">
                                 Añadir
                             </button>
@@ -432,15 +443,16 @@ Fecha: ${userData.fecha}`;
 
             document.getElementById('modal-title').textContent = product.name;
             document.getElementById('modal-img').src = product.img;
+            document.getElementById('modal-img').alt = product.name;
             document.getElementById('modal-desc').textContent = product.desc;
             document.getElementById('modal-oferta').innerHTML = `
                 <strong>Lo que ofrecemos con este producto:</strong><br><br>
                 Garantía de 1-2 años según el artículo<br>
                 Envío gratuito a todo el país<br>
-                Accesorios básicos incluidos (cuerdas, baquetas, boquillas, etc. según producto)<br>
-                Soporte técnico por WhatsApp 24/7<br>
+                Accesorios básicos incluidos según producto<br>
+                Soporte por WhatsApp<br>
                 Pago contra entrega disponible en La Vega y zonas cercanas<br>
-                Posibilidad de personalización o grabado en algunos artículos
+                Posibilidad de personalización en algunos artículos
             `;
 
             const addBtn = document.getElementById('modal-add-btn');
@@ -482,7 +494,10 @@ Fecha: ${userData.fecha}`;
         function toggleCartModal() {
             const modal = document.getElementById('cart-modal');
             modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
-            if (modal.style.display === 'flex') renderCart();
+            if (modal.style.display === 'flex') {
+                renderCart();
+                updateBankInfoVisibility();
+            }
         }
 
         function renderCart() {
@@ -503,10 +518,10 @@ Fecha: ${userData.fecha}`;
                 div.innerHTML = `
                     <div>
                         <p class="font-bold text-lg">${item.name}</p>
-                        <p class="text-sm text-gray-400">RD$ ${item.price.toLocaleString()} × ${item.quantity || 1}</p>
+                        <p class="text-sm text-gray-400">${formatDOP(item.price)} × ${item.quantity || 1}</p>
                     </div>
                     <div class="flex items-center gap-6">
-                        <span class="font-bold text-xl gold-text">RD$ ${(item.price * (item.quantity || 1)).toLocaleString()}</span>
+                        <span class="font-bold text-xl gold-text">${formatDOP(item.price * (item.quantity || 1))}</span>
                         <button onclick="removeFromCart(${item.id})" class="text-red-500 hover:text-red-400 text-xl">
                             <i class="fa-solid fa-trash"></i>
                         </button>
@@ -515,7 +530,7 @@ Fecha: ${userData.fecha}`;
                 container.appendChild(div);
             });
 
-            document.getElementById('cart-total').textContent = `RD$ ${total.toLocaleString()}`;
+            document.getElementById('cart-total').textContent = formatDOP(total);
         }
 
         function removeFromCart(id) {
@@ -525,6 +540,17 @@ Fecha: ${userData.fecha}`;
             renderCart();
         }
 
+        function updateBankInfoVisibility() {
+            const selected = document.querySelector('input[name="payment"]:checked')?.value;
+            const bankInfo = document.getElementById('bank-info');
+
+            if (selected === 'transferencia') {
+                bankInfo.classList.remove('hidden');
+            } else {
+                bankInfo.classList.add('hidden');
+            }
+        }
+
         function finalizarCompra() {
             if (cart.length === 0) {
                 showToast("El carrito está vacío");
@@ -532,37 +558,53 @@ Fecha: ${userData.fecha}`;
             }
 
             const user = JSON.parse(localStorage.getItem('mixkit_user') || '{}');
-            const metodoPago = obtenerMetodoPago();
+            const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value || 'whatsapp';
+
+            const metodoTexto = {
+                tarjeta: 'Tarjeta',
+                transferencia: 'Transferencia / Pago por comprobante',
+                efectivo: 'Efectivo contra entrega',
+                whatsapp: 'Coordinar por WhatsApp'
+            };
 
             let total = 0;
-            let resumenProductos = '';
-
-            cart.forEach((item, index) => {
+            let detalles = cart.map(item => {
                 const subtotal = item.price * (item.quantity || 1);
                 total += subtotal;
-                resumenProductos += `${index + 1}. ${item.name} x${item.quantity || 1} - RD$ ${subtotal.toLocaleString()}\n`;
-            });
+                return `• ${item.name} x${item.quantity || 1} - ${formatDOP(subtotal)}`;
+            }).join('\n');
 
-            const texto = `Nueva compra en Mixkit Records
+            let mensaje = `Hola, quiero realizar este pedido:\n\n`;
+            mensaje += `Nombre: ${user.nombre || 'No especificado'}\n`;
+            mensaje += `Teléfono: ${user.telefono || 'No especificado'}\n`;
+            mensaje += `Instrumento de interés: ${user.instrumento || 'No especificado'}\n`;
+            mensaje += `Método de pago: ${metodoTexto[paymentMethod] || paymentMethod}\n\n`;
+            mensaje += `Productos:\n${detalles}\n\n`;
+            mensaje += `Total: ${formatDOP(total)}\n`;
 
-Cliente: ${user.nombre || 'No disponible'}
-Teléfono: ${user.telefono || 'No disponible'}
-Instrumento de interés: ${user.instrumento || 'No disponible'}
+            if (paymentMethod === 'transferencia') {
+                mensaje += `\nEnviaré el comprobante de pago por esta vía.`;
+            } else if (paymentMethod === 'efectivo') {
+                mensaje += `\nPrefiero pago contra entrega.`;
+            } else if (paymentMethod === 'tarjeta') {
+                mensaje += `\nDeseo pagar con tarjeta.`;
+            } else {
+                mensaje += `\nQuiero coordinar la compra por WhatsApp.`;
+            }
 
-Productos:
-${resumenProductos}
-Método de pago: ${metodoPago}
-Total: RD$ ${total.toLocaleString()}
-Fecha: ${new Date().toLocaleString('es-DO')}`;
+            const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
+            window.open(url, '_blank');
 
-            showToast("Abriendo WhatsApp con el pedido...");
-            abrirWhatsApp(texto);
-
+            showToast("Redirigiendo a WhatsApp...");
             cart = [];
             localStorage.setItem('cart', JSON.stringify(cart));
             updateCartCount();
             toggleCartModal();
         }
+
+        document.querySelectorAll('input[name="payment"]').forEach(radio => {
+            radio.addEventListener('change', updateBankInfoVisibility);
+        });
 
         renderProducts();
         renderAccesorios();
